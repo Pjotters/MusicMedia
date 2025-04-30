@@ -439,12 +439,36 @@
                 <div class="track-cover" style="background-image:url('uploads/${track.cover || 'default.jpg'}')"></div>
                 <div class="track-title">${track.title}</div>
                 <div class="track-artist">${track.artist}</div>
-                <button onclick="playTrack(${track.id})">Play</button>
+                <button class="play-btn">Play</button>
             `;
+            el.querySelector('.play-btn').onclick = () => playTrack(track.id);
             container.appendChild(el);
         });
     }
     loadAiRecommendations();
+
+    // --- Player functionaliteit ---
+    function playTrack(trackId) {
+        // Vind track info
+        fetch(window.config.apiUrl + '/api/music')
+            .then(res => res.json())
+            .then(musicList => {
+                const track = musicList.find(t => t.id == trackId);
+                if (!track) return;
+                // Zet info in playerbar
+                document.querySelector('.playerbar .title').textContent = track.title;
+                document.querySelector('.playerbar .artist').textContent = track.artist;
+                // Voeg audio toe aan playerbar
+                let audio = document.querySelector('.playerbar audio');
+                if (!audio) {
+                    audio = document.createElement('audio');
+                    audio.controls = true;
+                    document.querySelector('.playerbar').appendChild(audio);
+                }
+                audio.src = window.config.apiUrl + '/api/stream/' + track.filename;
+                audio.play();
+            });
+    }
     </script>
 </body>
 </html>
