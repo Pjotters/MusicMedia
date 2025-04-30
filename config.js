@@ -1,5 +1,6 @@
 // config.js
 const config = {
-  apiUrl: 'https://bt-dates-adware-bennett.trycloudflare.com'
+  apiUrl: 'http://localhost:3001', // backend API
+  riffusionUrl: 'https://winner-struggle-practical-catalogue.trycloudflare.com' // nieuwe Riffusion API
 };
 window.config = config;

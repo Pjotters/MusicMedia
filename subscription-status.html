@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Bevestig je abonnement - MusicMedia</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { background: #181818; color: #fff; font-family: 'Montserrat', Arial, sans-serif; margin: 0; }
+        .centerbox { max-width: 480px; margin: 90px auto; background: #232526; border-radius: 24px; box-shadow: 0 6px 32px #0007; padding: 42px 38px; text-align: center; }
+        .mail-anim {
+            margin: 0 auto 32px auto; width: 90px; height: 90px; border-radius: 50%; background: linear-gradient(135deg,#1db954 60%,#3a1c71 100%); display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 20px #1db95455; }
+        .mail-anim svg { width: 60px; height: 60px; }
+        .status-anim { margin: 32px 0 0 0; height: 90px; display: flex; align-items: center; justify-content: center; }
+        .status-anim svg { width: 60px; height: 60px; }
+        .anim-fade { opacity: 0; transition: opacity 0.7s; }
+        .anim-fade.active { opacity: 1; }
+        .msg { font-size: 1.25em; margin: 32px 0 0 0; }
+    </style>
+</head>
+<body>
+    <div class="centerbox">
+        <div class="mail-anim">
+            <svg viewBox="0 0 64 64"><rect x="8" y="20" width="48" height="32" rx="6" fill="#fff"/><polyline points="8,20 32,40 56,20" fill="none" stroke="#1db954" stroke-width="3"/></svg>
+        </div>
+        <div class="msg">Er is een factuur gestuurd naar je e-mail.<br>Kijk in je opgegeven mail en betaal de factuur om je abonnement te activeren.</div>
+        <div class="status-anim" id="statusAnim">
+            <svg id="icon-cross" class="anim-fade active" viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="#db1d1d"/><line x1="20" y1="20" x2="44" y2="44" stroke="#fff" stroke-width="5"/><line x1="44" y1="20" x2="20" y2="44" stroke="#fff" stroke-width="5"/></svg>
+            <svg id="icon-check" class="anim-fade" viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="#1db954"/><polyline points="18,34 30,46 46,20" fill="none" stroke="#fff" stroke-width="5"/></svg>
+            <svg id="icon-person" class="anim-fade" viewBox="0 0 64 64"><circle cx="32" cy="28" r="14" fill="#3a1c71"/><ellipse cx="32" cy="52" rx="14" ry="8" fill="#1db954"/></svg>
+        </div>
+        <div class="msg" id="adminMsg" style="margin-top:28px;">Zodra je hebt betaald, wordt je betaling binnen 2 werkdagen door een admin gecontroleerd.<br>Je krijgt een melding zodra je abonnement is geactiveerd!</div>
+    </div>
+    <script src="config.js"></script>
+    <script>
+    // Animatie-cyclus: kruis -> vinkje -> poppetje -> kruis
+    let icons = ['icon-cross','icon-check','icon-person'];
+    let idx = 0;
+    setInterval(() => {
+        icons.forEach((id,i) => {
+            document.getElementById(id).classList.toggle('active', i === idx);
+        });
+        idx = (idx+1)%icons.length;
+    }, 1000);
+
+    // Confetti animatie bij activatie
+    function showConfetti() {
+        const conf = document.createElement('div');
+        conf.style.position = 'fixed';
+        conf.style.left = 0;
+        conf.style.top = 0;
+        conf.style.width = '100vw';
+        conf.style.height = '100vh';
+        conf.style.pointerEvents = 'none';
+        conf.style.zIndex = 9999;
+        conf.innerHTML = `<canvas id="confetti-canvas" style="width:100vw;height:100vh;"></canvas>`;
+        document.body.appendChild(conf);
+        // Simpele JS confetti
+        (function(){
+            const canvas = document.getElementById('confetti-canvas');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const ctx = canvas.getContext('2d');
+            const pieces = Array.from({length:140},()=>({
+                x: Math.random()*canvas.width,
+                y: Math.random()*-canvas.height,
+                r: 6+Math.random()*10,
+                c: `hsl(${Math.random()*360},90%,60%)`,
+                s: 2+Math.random()*4,
+                a: Math.random()*2*Math.PI
+            }));
+            let frame=0;
+            function draw() {
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                for(const p of pieces) {
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.a);
+                    ctx.fillStyle = p.c;
+                    ctx.beginPath();
+                    ctx.arc(0,0,p.r,0,2*Math.PI);
+                    ctx.fill();
+                    ctx.restore();
+                    p.y += p.s;
+                    p.x += Math.sin(p.a+frame/10)*2;
+                    if(p.y > canvas.height+20) p.y = -10;
+                }
+                frame++;
+                if(frame<180) requestAnimationFrame(draw);
+                else conf.remove();
+            }
+            draw();
+        })();
+    }
+    // Geluid bij activatie
+    function playCelebrateSound() {
+        const audio = new Audio('https://cdn.pixabay.com/audio/2022/07/26/audio_124bfae7b8.mp3'); // rechtenvrij
+        audio.volume = 0.25;
+        audio.play();
+    }
+    // Live statuscheck
+    async function pollStatus() {
+        const token = localStorage.getItem('musicmedia_token');
+        if (!token) return;
+        const res = await fetch(window.config.apiUrl + '/api/subscription/status', {
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await res.json();
+        if(data.status === 'active') {
+            document.querySelector('.msg').innerHTML = 'Gefeliciteerd! Je abonnement is nu actief 🎉<br>Veel luisterplezier op MusicMedia!';
+            document.getElementById('adminMsg').style.display = 'none';
+            document.getElementById('icon-cross').style.display = 'none';
+            document.getElementById('icon-check').classList.add('active');
+            document.getElementById('icon-check').style.display = '';
+            document.getElementById('icon-person').style.display = 'none';
+            showConfetti();
+            playCelebrateSound();
+        } else {
+            setTimeout(pollStatus, 3500);
+        }
+    }
+    pollStatus();
+    </script>
+</body>
+</html>

@@ -2,66 +2,250 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <title>Muziek uploaden - MusicMedia</title>
+    <title>Muziek Uploaden - MusicMedia</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .step { display: none; }
+        .step.active { display: block; }
+        .step-buttons { margin-top: 2em; display: flex; gap: 1em; }
+        .switch { position: relative; display: inline-block; width: 52px; height: 28px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #ccc; transition: .4s; border-radius: 28px; }
+        .slider:before { position: absolute; content: ""; height: 22px; width: 22px; left: 4px; bottom: 3px; background: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background: #1db954; }
+        input:checked + .slider:before { transform: translateX(24px); }
+        .subartist-row { display: flex; gap: 0.5em; align-items: center; margin-bottom: 0.5em; }
+        .subartist-row input { flex: 1; }
+        .add-btn { background: #232526; border: 2px solid #1db954; color: #1db954; border-radius: 50%; width: 32px; height: 32px; font-size: 1.2em; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .remove-btn { background: #232526; border: 2px solid #db1d1d; color: #db1d1d; border-radius: 50%; width: 32px; height: 32px; font-size: 1.2em; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    </style>
 </head>
 <body>
     <header>
-        <h1>Muziek uploaden</h1>
+        <h1>Muziek Uploaden</h1>
     </header>
     <main>
-        <form id="upload-form" enctype="multipart/form-data" class="card">
-            <label>Titel</label>
-            <input type="text" name="title" placeholder="Titel" required>
-            <label>Artiest</label>
-            <input type="text" name="artist" placeholder="Artiest" required>
-            <label>Album cover</label>
-            <input type="file" name="cover" accept="image/*" id="cover-input" required>
-            <img id="cover-preview" class="album-cover-preview" style="display:none;" />
-            <label>Bestand (mp3/wav)</label>
-            <input type="file" name="music" accept="audio/mp3,audio/wav,audio/mpeg" required>
-            <button type="submit">Uploaden</button>
+        <form id="upload-wizard" class="card" enctype="multipart/form-data">
+            <!-- Step 1: Welkom -->
+            <div class="step active" id="step-1">
+                <h2>Welkom, <span id="username">...</span>!</h2>
+                <p>Vul hieronder je artiestennaam in:</p>
+                <input type="text" name="artist" id="artist" placeholder="Artiestennaam" required>
+                <div class="step-buttons">
+                    <button type="button" id="to-step-2">Volgende</button>
+                </div>
+            </div>
+            <!-- Step 2: Type kiezen -->
+            <div class="step" id="step-2">
+                <h2>Wat wil je uploaden?</h2>
+                <div style="display:flex;gap:1em;">
+                    <button type="button" class="choose-type" data-type="nummer">Nummer</button>
+                    <button type="button" class="choose-type" data-type="podcast">Podcast</button>
+                    <button type="button" class="choose-type" data-type="luisterboek">Luisterboek</button>
+                </div>
+                <div class="step-buttons">
+                    <button type="button" id="back-1">Terug</button>
+                </div>
+            </div>
+            <!-- Step 3: Dynamisch formulier -->
+            <div class="step" id="step-3">
+                <div id="dynamic-fields"></div>
+                <div class="step-buttons">
+                    <button type="button" id="back-2">Terug</button>
+                    <button type="button" id="to-step-4">Volgende</button>
+                </div>
+            </div>
+            <!-- Step 4: Bestand en cover uploaden -->
+            <div class="step" id="step-4">
+                <label>Album cover</label>
+                <input type="file" name="cover" accept="image/*" id="cover-input" required>
+                <img id="cover-preview" class="album-cover-preview" style="display:none;" />
+                <label>Bestand (mp3/wav/m4a/mp4)</label>
+                <input type="file" name="music" accept="audio/mp3,audio/wav,audio/mpeg,audio/mp4,audio/x-m4a" required>
+                <div class="step-buttons">
+                    <button type="button" id="back-3">Terug</button>
+                    <button type="submit">Uploaden</button>
+                </div>
+            </div>
         </form>
     </main>
     <script src="config.js"></script>
     <script>
-        // Album cover preview
-        document.getElementById('cover-input').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            const preview = document.getElementById('cover-preview');
-            if (file) {
-                preview.src = URL.createObjectURL(file);
-                preview.style.display = 'block';
-            } else {
-                preview.src = '';
-                preview.style.display = 'none';
-            }
-        });
-        document.getElementById('upload-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
+    // --- Gebruikersnaam ophalen uit token (dummy voorbeeld) ---
+    function getUsernameFromToken() {
+        try {
             const token = localStorage.getItem('musicmedia_token');
-            if (!token) {
-                alert('Log eerst in!');
-                window.location.href = 'login.html';
-                return;
-            }
-            const formData = new FormData(this);
-            const res = await fetch(window.config.apiUrl + '/api/upload', {
-                method: 'POST',
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                },
-                body: formData
-            });
-            const data = await res.json();
-            if (data.success) {
-                alert('Upload gelukt!');
-                this.reset();
-                document.getElementById('cover-preview').style.display = 'none';
-            } else {
-                alert(data.error || 'Upload mislukt.');
-            }
+            if (!token) return '';
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            return payload.username || '';
+        } catch { return ''; }
+    }
+    document.getElementById('username').textContent = getUsernameFromToken();
+
+    // --- Stap-navigatie ---
+    let currentStep = 1;
+    let chosenType = '';
+    function showStep(n) {
+        document.querySelectorAll('.step').forEach((el,i)=>{
+            el.classList.toggle('active',i===n-1);
         });
+        currentStep = n;
+    }
+    document.getElementById('to-step-2').onclick = function(e) {
+        e.preventDefault();
+        if (!document.getElementById('artist').value) { alert('Vul een artiestennaam in!'); return; }
+        showStep(2);
+    };
+    document.getElementById('back-1').onclick = ()=>showStep(1);
+    document.getElementById('back-2').onclick = ()=>showStep(2);
+    document.getElementById('back-3').onclick = ()=>showStep(3);
+    document.querySelectorAll('.choose-type').forEach(btn=>{
+        btn.onclick = function() {
+            chosenType = this.dataset.type;
+            renderDynamicFields();
+            showStep(3);
+        };
+    });
+    document.getElementById('to-step-4').onclick = function() {
+        if (!validateDynamicFields()) return;
+        showStep(4);
+    };
+
+    // --- Dynamische velden ---
+    function renderDynamicFields() {
+        const container = document.getElementById('dynamic-fields');
+        container.innerHTML = '';
+        if (chosenType === 'nummer') {
+            container.innerHTML += '<label>Titel</label><input type="text" name="title" required>';
+            container.innerHTML += '<label>Subartiesten</label><div id="subartists-list"></div><button type="button" class="add-btn" id="add-subartist">+</button>';
+            container.innerHTML += '<label>Genre</label><input type="text" name="genre">';
+            container.innerHTML += '<label>Doel van het nummer</label><input type="text" name="goal" placeholder="Entertainment, educatief, etc">';
+            container.innerHTML += '<label>Songtekst</label><textarea name="lyrics" rows="3"></textarea>';
+            container.innerHTML += '<label>Expliciet?</label><label class="switch"><input type="checkbox" name="explicit"><span class="slider"></span></label>';
+            setupSubartists();
+        } else if (chosenType === 'podcast' || chosenType === 'luisterboek') {
+            container.innerHTML += '<label>Titel</label><input type="text" name="title" required>';
+            container.innerHTML += '<label>Hosts</label><div id="hosts-list"></div><button type="button" class="add-btn" id="add-host">+</button>';
+            container.innerHTML += '<label>Sprekers</label><div id="speakers-list"></div><button type="button" class="add-btn" id="add-speaker">+</button>';
+            container.innerHTML += '<label>Categorie</label><input type="text" name="category">';
+            container.innerHTML += '<label>Beschrijving</label><textarea name="description" rows="3"></textarea>';
+            container.innerHTML += '<label>Expliciet?</label><label class="switch"><input type="checkbox" name="explicit"><span class="slider"></span></label>';
+            setupHostsSpeakers();
+        }
+    }
+    function setupSubartists() {
+        const list = document.getElementById('subartists-list');
+        let subartists = [];
+        function render() {
+            list.innerHTML = '';
+            subartists.forEach((val,i)=>{
+                const row = document.createElement('div');
+                row.className = 'subartist-row';
+                row.innerHTML = `<input type="text" value="${val}" placeholder="Subartiestennaam"/><button type="button" class="remove-btn">-</button>`;
+                row.querySelector('input').oninput = e=>{ subartists[i] = e.target.value; };
+                row.querySelector('.remove-btn').onclick = ()=>{ subartists.splice(i,1); render(); };
+                list.appendChild(row);
+            });
+        }
+        document.getElementById('add-subartist').onclick = ()=>{ subartists.push(''); render(); };
+        render();
+        // Bij submit: window.getSubartists = () => subartists.filter(Boolean);
+        window.getSubartists = () => subartists.filter(Boolean);
+    }
+    function setupHostsSpeakers() {
+        const hostsList = document.getElementById('hosts-list');
+        const speakersList = document.getElementById('speakers-list');
+        let hosts = [], speakers = [];
+        function renderHosts() {
+            hostsList.innerHTML = '';
+            hosts.forEach((val,i)=>{
+                const row = document.createElement('div');
+                row.className = 'subartist-row';
+                row.innerHTML = `<input type="text" value="${val}" placeholder="Hostnaam"/><button type="button" class="remove-btn">-</button>`;
+                row.querySelector('input').oninput = e=>{ hosts[i] = e.target.value; };
+                row.querySelector('.remove-btn').onclick = ()=>{ hosts.splice(i,1); renderHosts(); };
+                hostsList.appendChild(row);
+            });
+        }
+        function renderSpeakers() {
+            speakersList.innerHTML = '';
+            speakers.forEach((val,i)=>{
+                const row = document.createElement('div');
+                row.className = 'subartist-row';
+                row.innerHTML = `<input type="text" value="${val}" placeholder="Sprekernaam"/><button type="button" class="remove-btn">-</button>`;
+                row.querySelector('input').oninput = e=>{ speakers[i] = e.target.value; };
+                row.querySelector('.remove-btn').onclick = ()=>{ speakers.splice(i,1); renderSpeakers(); };
+                speakersList.appendChild(row);
+            });
+        }
+        document.getElementById('add-host').onclick = ()=>{ hosts.push(''); renderHosts(); };
+        document.getElementById('add-speaker').onclick = ()=>{ speakers.push(''); renderSpeakers(); };
+        renderHosts();
+        renderSpeakers();
+        window.getHosts = () => hosts.filter(Boolean);
+        window.getSpeakers = () => speakers.filter(Boolean);
+    }
+    function validateDynamicFields() {
+        const step = document.getElementById('dynamic-fields');
+        const title = step.querySelector('input[name="title"]');
+        if (!title.value) { alert('Vul een titel in!'); return false; }
+        return true;
+    }
+    // --- Album cover preview ---
+    document.getElementById('cover-input').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        const preview = document.getElementById('cover-preview');
+        if (file) {
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = 'block';
+        } else {
+            preview.src = '';
+            preview.style.display = 'none';
+        }
+    });
+    // --- Submit ---
+    document.getElementById('upload-wizard').onsubmit = async function(e) {
+        e.preventDefault();
+        const token = localStorage.getItem('musicmedia_token');
+        if (!token) { alert('Log eerst in!'); window.location.href = 'login.html'; return; }
+        const artist = document.getElementById('artist').value;
+        const formData = new FormData();
+        formData.append('artist', artist);
+        formData.append('type', chosenType);
+        // Stap 3 velden
+        const dynamic = document.getElementById('dynamic-fields');
+        formData.append('title', dynamic.querySelector('input[name="title"]').value);
+        if (chosenType === 'nummer') {
+            formData.append('subartists', JSON.stringify(window.getSubartists ? window.getSubartists() : []));
+            formData.append('genre', dynamic.querySelector('input[name="genre"]').value);
+            formData.append('goal', dynamic.querySelector('input[name="goal"]').value);
+            formData.append('lyrics', dynamic.querySelector('textarea[name="lyrics"]').value);
+            formData.append('explicit', dynamic.querySelector('input[name="explicit"]').checked);
+        } else {
+            formData.append('hosts', JSON.stringify(window.getHosts ? window.getHosts() : []));
+            formData.append('speakers', JSON.stringify(window.getSpeakers ? window.getSpeakers() : []));
+            formData.append('category', dynamic.querySelector('input[name="category"]').value);
+            formData.append('description', dynamic.querySelector('textarea[name="description"]').value);
+            formData.append('explicit', dynamic.querySelector('input[name="explicit"]').checked);
+        }
+        // Stap 4 bestanden
+        const cover = document.getElementById('cover-input').files[0];
+        const music = document.querySelector('input[name="music"]').files[0];
+        formData.append('cover', cover);
+        formData.append('music', music);
+        const res = await fetch(window.config.apiUrl + '/api/upload', {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + token },
+            body: formData
+        });
+        const data = await res.json();
+        if (data.success) {
+            alert('Upload gelukt!');
+            window.location.reload();
+        } else {
+            alert(data.error || 'Upload mislukt.');
+        }
+    };
     </script>
 </body>
 </html>

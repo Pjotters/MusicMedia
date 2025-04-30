@@ -4,55 +4,258 @@
     <meta charset="UTF-8">
     <title>Abonnementen - MusicMedia</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1db954 0%, #3a1c71 100%);
+            font-family: 'Montserrat', Arial, sans-serif;
+            margin: 0;
+            color: #fff;
+        }
+        .pricing-hero {
+            background: rgba(20,20,20,0.96);
+            padding: 40px 0 28px 0;
+            text-align: center;
+            box-shadow: 0 2px 12px #0005;
+        }
+        .pricing-hero h1 {
+            font-size: 2.7em;
+            margin-bottom: 0.2em;
+            letter-spacing: -2px;
+        }
+        .pricing-hero p {
+            color: #b3b3b3;
+            font-size: 1.2em;
+            margin-top: 0;
+        }
+        .plan-section {
+            margin: 0 auto;
+            max-width: 1100px;
+            padding: 36px 0 60px 0;
+        }
+        .plan-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            margin-bottom: 32px;
+        }
+        .plan-tabs button {
+            background: #232526;
+            color: #fff;
+            border: none;
+            font-size: 1.1em;
+            padding: 10px 32px;
+            border-radius: 22px;
+            cursor: pointer;
+            transition: background .2s, color .2s;
+        }
+        .plan-tabs button.active {
+            background: #1db954;
+            color: #fff;
+        }
+        .plans {
+            display: flex;
+            gap: 32px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 18px;
+        }
+        .plan-card {
+            background: linear-gradient(135deg, #232526 60%, #1db954 100%);
+            color: #fff;
+            border-radius: 24px;
+            box-shadow: 0 4px 32px #0004;
+            width: 260px;
+            min-height: 420px;
+            padding: 32px 28px 36px 28px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            transition: transform .2s, box-shadow .2s;
+            animation: floatIn .7s cubic-bezier(.68,-0.55,.27,1.55);
+        }
+        .plan-card.popular {
+            background: linear-gradient(135deg, #1db954 60%, #3a1c71 100%);
+            color: #fff;
+            transform: scale(1.07);
+            z-index: 2;
+            box-shadow: 0 8px 40px #1db95444, 0 1.5px 0 #fff2 inset;
+        }
+        .plan-card .popular-badge {
+            position: absolute;
+            top: 18px; right: -40px;
+            background: #fff;
+            color: #1db954;
+            font-weight: bold;
+            font-size: 1em;
+            padding: 7px 42px;
+            border-radius: 22px;
+            transform: rotate(25deg);
+            box-shadow: 0 2px 10px #0002;
+            letter-spacing: 1px;
+        }
+        .plan-card h2 {
+            font-size: 2em;
+            margin: 0 0 12px 0;
+        }
+        .plan-card .plan-price {
+            font-size: 2.1em;
+            font-weight: bold;
+            margin-bottom: 0.2em;
+            color: #fff;
+        }
+        .plan-card .plan-desc {
+            color: #e2e2e2;
+            font-size: 1.1em;
+            min-height: 56px;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+        .plan-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 18px 0;
+            text-align: left;
+        }
+        .plan-card ul li {
+            margin-bottom: 10px;
+            font-size: 1.08em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .plan-card ul li .check {
+            color: #1db954;
+            font-size: 1.2em;
+        }
+        .plan-card button {
+            background: linear-gradient(90deg, #1db954 60%, #3a1c71 100%);
+            color: #fff;
+            border: none;
+            padding: 13px 0;
+            width: 100%;
+            border-radius: 18px;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: auto;
+            cursor: pointer;
+            box-shadow: 0 2px 8px #1db95433;
+            transition: background .2s, transform .2s;
+            animation: pulse 1.8s infinite alternate;
+        }
+        .plan-card button:hover {
+            background: linear-gradient(90deg, #3a1c71 30%, #1db954 100%);
+            transform: scale(1.05);
+        }
+        @keyframes floatIn {
+            0% { opacity: 0; transform: translateY(60px) scale(0.95); }
+            100% { opacity: 1; transform: none; }
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 2px 8px #1db95433; }
+            100% { box-shadow: 0 6px 24px #1db95499; }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Kies je abonnement</h1>
-    </header>
-    <main>
+    <div class="pricing-hero">
+        <h1>Vind jouw perfecte abonnement</h1>
+        <p>Kies het plan dat bij jou past en krijg toegang tot alle MusicMedia features.<br>Upgrade of downgrade altijd wanneer je wilt!</p>
+    </div>
+    <div class="plan-section">
+        <div class="plan-tabs">
+            <button class="active" id="tab-gen">Algemeen</button>
+            <button id="tab-ecom">E-commerce</button>
+        </div>
         <div class="plans">
-            <div class="plan free">
-                <h2>Gratis</h2>
-                <p>Luister muziek, upload tot 5 tracks per maand, 3 playlists, 1 album, 3 AI-tracks.</p>
-                <button>Kies Gratis</button>
+            <div class="plan-card" id="plan-free">
+                <h2>Starter</h2>
+                <div class="plan-price">Gratis</div>
+                <div class="plan-desc">Perfect om MusicMedia te leren kennen!</div>
+                <ul>
+                    <li><span class="check">✔</span> 5 uploads/maand</li>
+                    <li><span class="check">✔</span> 3 playlists</li>
+                    <li><span class="check">✔</span> 1 album</li>
+                    <li><span class="check">✔</span> 3 AI-tracks</li>
+                    <li><span class="check">✔</span> 1GB opslag</li>
+                </ul>
+                <button>Kies Starter</button>
             </div>
-            <div class="plan basic">
-                <h2>€4,99 / maand</h2>
-                <p>50 uploads/maand, 10 playlists, 5 albums, 20 AI-tracks, downloaden, geen advertenties.</p>
+            <div class="plan-card" id="plan-basic">
+                <h2>Basic</h2>
+                <div class="plan-price">€4,99 <span style="font-size:0.6em;">/maand</span></div>
+                <div class="plan-desc">Voor wie meer wil uploaden, downloaden en geen advertenties wil!</div>
+                <ul>
+                    <li><span class="check">✔</span> 50 uploads/maand</li>
+                    <li><span class="check">✔</span> 10 playlists</li>
+                    <li><span class="check">✔</span> 5 albums</li>
+                    <li><span class="check">✔</span> 20 AI-tracks</li>
+                    <li><span class="check">✔</span> Downloaden</li>
+                    <li><span class="check">✔</span> Geen advertenties</li>
+                </ul>
                 <button>Kies Basic</button>
             </div>
-            <div class="plan premium">
-                <h2>€9,99 / maand</h2>
-                <p>Onbeperkt uploads, playlists, albums, AI-tracks, downloaden, geen advertenties, early access features.</p>
+            <div class="plan-card popular" id="plan-premium">
+                <div class="popular-badge">Meest populair</div>
+                <h2>Premium</h2>
+                <div class="plan-price">€9,99 <span style="font-size:0.6em;">/maand</span></div>
+                <div class="plan-desc">Onbeperkt uploads, alles unlocked, early access & meer.</div>
+                <ul>
+                    <li><span class="check">✔</span> Onbeperkt uploads</li>
+                    <li><span class="check">✔</span> Onbeperkt playlists</li>
+                    <li><span class="check">✔</span> Onbeperkt albums</li>
+                    <li><span class="check">✔</span> Onbeperkt AI-tracks</li>
+                    <li><span class="check">✔</span> Downloaden</li>
+                    <li><span class="check">✔</span> Geen advertenties</li>
+                    <li><span class="check">✔</span> Early access features</li>
+                </ul>
                 <button>Kies Premium</button>
             </div>
+            <div class="plan-card" id="plan-enterprise">
+                <h2>Enterprise</h2>
+                <div class="plan-price">Contact</div>
+                <div class="plan-desc">Voor grote artiesten, labels en bedrijven. Neem contact op voor een aanbod op maat!</div>
+                <ul>
+                    <li><span class="check">✔</span> Custom uploads & AI</li>
+                    <li><span class="check">✔</span> Eigen branding</li>
+                    <li><span class="check">✔</span> SLA & support</li>
+                    <li><span class="check">✔</span> API toegang</li>
+                </ul>
+                <button>Contact</button>
+            </div>
         </div>
-    </main>
+    </div>
     <script src="config.js"></script>
     <script>
-        document.querySelectorAll('.plan button').forEach(btn => {
+        // Animatie bij hover
+        document.querySelectorAll('.plan-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'scale(1.09)';
+                card.style.boxShadow = '0 8px 40px #1db95499, 0 1.5px 0 #fff2 inset';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
+                card.style.boxShadow = '';
+            });
+        });
+        // Abonnement kiezen
+        document.querySelectorAll('.plan-card button').forEach(btn => {
             btn.addEventListener('click', async function() {
-                const plan = this.parentElement.classList.contains('free') ? 'free' : this.parentElement.classList.contains('basic') ? 'basic' : 'premium';
+                const plan = this.parentElement.id.replace('plan-', '');
+                if (plan === 'enterprise') {
+                    window.open('mailto:info@musicmedia.nl?subject=Enterprise aanvraag');
+                    return;
+                }
                 const token = localStorage.getItem('musicmedia_token');
                 if (!token) {
                     alert('Log eerst in!');
                     window.location.href = 'login.html';
                     return;
                 }
-                if (plan !== 'free') {
-                    // Simuleer betaling
-                    const pay = await fetch(window.config.apiUrl + '/api/payment/mock', {
-                        method: 'POST',
-                        headers: { 'Authorization': 'Bearer ' + token }
-                    });
-                    const payData = await pay.json();
-                    if (!payData.success) {
-                        alert('Betaling mislukt!');
-                        return;
-                    }
-                }
-                // Abonnement kiezen
-                const res = await fetch(window.config.apiUrl + '/api/subscription', {
+                // Factuur genereren en mailen
+                const invoice = await fetch(window.config.apiUrl + '/api/subscription/invoice', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -60,12 +263,13 @@
                     },
                     body: JSON.stringify({ plan })
                 });
-                const data = await res.json();
-                if (data.success) {
-                    alert('Abonnement gewijzigd!');
-                } else {
-                    alert(data.error || 'Fout bij wijzigen abonnement.');
+                const invoiceData = await invoice.json();
+                if (!invoiceData.success) {
+                    alert(invoiceData.error || 'Fout bij versturen factuur.');
+                    return;
                 }
+                // Toon statuspagina
+                window.location.href = 'subscription-status.html';
             });
         });
     </script>

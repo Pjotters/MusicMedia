@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Facturen</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { background: #181818; color: #fff; font-family: 'Montserrat', Arial, sans-serif; }
+        .centerbox { max-width: 680px; margin: 60px auto; background: #232526; border-radius: 18px; box-shadow: 0 6px 32px #0007; padding: 36px 32px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 24px; }
+        th, td { padding: 13px 8px; border-bottom: 1px solid #333; text-align: left; }
+        th { color: #1db954; font-size: 1.13em; }
+        tr.pending { background: #2b2b2b; }
+        button { background: #1db954; color: #fff; border: none; border-radius: 8px; padding: 8px 22px; font-size: 1em; cursor: pointer; margin-left: 8px; }
+        button:disabled { background: #444; color: #999; }
+    </style>
+</head>
+<body>
+    <div class="centerbox">
+        <h2>Te bevestigen facturen</h2>
+        <table id="invoiceTable">
+            <thead>
+                <tr><th>Gebruiker</th><th>Plan</th><th>Factuurnr</th><th>Status</th><th>Actie</th></tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <script src="config.js"></script>
+    <script>
+    async function loadInvoices() {
+        const token = localStorage.getItem('musicmedia_token');
+        const res = await fetch(window.config.apiUrl + '/api/admin/invoices', {
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await res.json();
+        const tbody = document.querySelector('#invoiceTable tbody');
+        tbody.innerHTML = '';
+        data.forEach(row => {
+            const tr = document.createElement('tr');
+            tr.className = row.status === 'pending' ? 'pending' : '';
+            tr.innerHTML = `<td>${row.username || row.email}</td><td>${row.plan}</td><td>${row.invoiceNr}</td><td>${row.status}</td><td></td>`;
+            if(row.status === 'pending') {
+                const btn = document.createElement('button');
+                btn.textContent = 'Bevestig betaling';
+                btn.onclick = async () => {
+                    btn.disabled = true;
+                    await fetch(window.config.apiUrl + '/api/subscription/confirm', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                        body: JSON.stringify({ userId: row.id, invoiceNr: row.invoiceNr })
+                    });
+                    loadInvoices();
+                };
+                tr.querySelector('td:last-child').appendChild(btn);
+            }
+            tbody.appendChild(tr);
+        });
+    }
+    loadInvoices();
+    </script>
+</body>
+</html>
