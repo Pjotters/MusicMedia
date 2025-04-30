@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Muziek - MusicMedia</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>AI Muziek Genereren</h1>
+    </header>
+    <main>
+        <form id="ai-form">
+            <label><input type="radio" name="type" value="instrumental" checked> Instrumentaal</label>
+            <label><input type="radio" name="type" value="vocals"> Met vocals</label>
+            <div id="instrumental-options">
+                <input type="text" placeholder="Genre">
+                <input type="text" placeholder="Sfeer (rustig, vrolijk, etc)">
+                <input type="text" placeholder="Instrumenten (komma gescheiden)">
+            </div>
+            <div id="vocals-options" style="display:none;">
+                <textarea placeholder="Songtekst"></textarea><br>
+                <select>
+                    <option>Mannenstem</option>
+                    <option>Vrouwenstem</option>
+                </select>
+            </div>
+            <button type="submit">Genereer Muziek</button>
+        </form>
+    </main>
+    <script src="config.js"></script>
+    <script>
+        // Toggle opties
+        document.querySelectorAll('input[name="type"]').forEach(el => {
+            el.addEventListener('change', function() {
+                document.getElementById('instrumental-options').style.display = this.value === 'instrumental' ? '' : 'none';
+                document.getElementById('vocals-options').style.display = this.value === 'vocals' ? '' : 'none';
+            });
+        });
+        document.getElementById('ai-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const token = localStorage.getItem('musicmedia_token');
+            if (!token) {
+                alert('Log eerst in!');
+                window.location.href = 'login.html';
+                return;
+            }
+            const type = document.querySelector('input[name="type"]:checked').value;
+            let payload = { type };
+            if (type === 'instrumental') {
+                payload.genre = document.querySelector('input[placeholder="Genre"]').value;
+                payload.sfeer = document.querySelector('input[placeholder^="Sfeer"]').value;
+                payload.instrumenten = document.querySelector('input[placeholder^="Instrumenten"]').value;
+            } else {
+                payload.lyrics = document.querySelector('textarea[placeholder="Songtekst"]').value;
+                payload.voice = document.querySelector('select').value;
+            }
+            // Simuleer AI-generatie
+            const res = await fetch(window.config.apiUrl + '/api/aigenerate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (data.success && data.track) {
+                alert('AI-muziek gegenereerd en toegevoegd!');
+            } else {
+                alert(data.error || 'AI-generatie mislukt.');
+            }
+        });
+    </script>
+</body>
+</html>

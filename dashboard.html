@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - MusicMedia</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Dashboard</h1>
+    </header>
+    <main>
+        <h2>Profiel aanpassen</h2>
+        <form id="profile-form">
+            <input type="text" placeholder="Gebruikersnaam"><br>
+            <input type="email" placeholder="E-mail"><br>
+            <input type="file" accept="image/*"><br>
+            <textarea placeholder="Bio"></textarea><br>
+            <button type="submit">Opslaan</button>
+        </form>
+    </main>
+    <script src="config.js"></script>
+    <script>
+        async function loadProfile() {
+            const token = localStorage.getItem('musicmedia_token');
+            if (!token) {
+                alert('Log eerst in!');
+                window.location.href = 'login.html';
+                return;
+            }
+            const res = await fetch(window.config.apiUrl + '/api/profile', {
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            const data = await res.json();
+            if (data.username) {
+                document.querySelector('input[placeholder="Gebruikersnaam"]').value = data.username;
+                document.querySelector('input[placeholder="E-mail"]').value = data.email;
+                document.querySelector('textarea[placeholder="Bio"]').value = data.profile?.bio || '';
+                // Avatar en abonnement kunnen hier ook geladen worden
+            }
+        }
+        document.getElementById('profile-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const token = localStorage.getItem('musicmedia_token');
+            const username = this.querySelector('input[placeholder="Gebruikersnaam"]').value;
+            const email = this.querySelector('input[placeholder="E-mail"]').value;
+            const bio = this.querySelector('textarea[placeholder="Bio"]').value;
+            // Avatar uploaden kan later
+            const res = await fetch(window.config.apiUrl + '/api/profile/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify({ username, email, bio })
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert('Profiel aangepast!');
+            } else {
+                alert(data.error || 'Fout bij opslaan.');
+            }
+        });
+        loadProfile();
+    </script>
+</body>
+</html>

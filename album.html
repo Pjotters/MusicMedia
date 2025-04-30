@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Albums - MusicMedia</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Albums</h1>
+    </header>
+    <main>
+        <div id="albums"></div>
+    </main>
+    <script src="config.js"></script>
+    <script>
+        let allTracks = [];
+        async function loadAlbums() {
+            const res = await fetch(window.config.apiUrl + '/api/albums');
+            const albums = await res.json();
+            const container = document.getElementById('albums');
+            container.innerHTML = '';
+            if (Array.isArray(albums) && albums.length > 0) {
+                albums.forEach(alb => {
+                    const div = document.createElement('div');
+                    div.innerHTML = `<b>${alb.name}</b> door gebruiker ${alb.userId}<br>Tracks: ${alb.tracks.length}`;
+                    // Toon tracks in dit album
+                    if (alb.tracks.length > 0) {
+                        const ul = document.createElement('ul');
+                        alb.tracks.forEach(trackId => {
+                            const track = allTracks.find(t => t.id == trackId);
+                            if (track) {
+                                const li = document.createElement('li');
+                                li.innerHTML = `<b>${track.title}</b> (${track.artist}) <audio controls src="${window.config.apiUrl}/api/stream/${track.filename}"></audio>`;
+                                // Verwijder-knop
+                                const removeBtn = document.createElement('button');
+                                removeBtn.textContent = 'Verwijder';
+                                removeBtn.onclick = () => modifyTrack(alb.id, track.id, 'remove');
+                                li.appendChild(removeBtn);
+                                ul.appendChild(li);
+                            }
+                        });
+                        div.appendChild(ul);
+                    }
+                    // Toevoegen dropdown
+                    const select = document.createElement('select');
+                    select.innerHTML = '<option value="">Voeg track toe...</option>' + allTracks.filter(t => !alb.tracks.includes(t.id)).map(t => `<option value="${t.id}">${t.title} (${t.artist})</option>`).join('');
+                    select.onchange = function() {
+                        if (this.value) modifyTrack(alb.id, this.value, 'add');
+                    };
+                    div.appendChild(select);
+                    container.appendChild(div);
+                    container.appendChild(document.createElement('hr'));
+                });
+            } else {
+                container.innerHTML = '<em>Geen albums gevonden.</em>';
+            }
+        }
+        async function modifyTrack(albumId, trackId, action) {
+            const token = localStorage.getItem('musicmedia_token');
+            if (!token) {
+                alert('Log eerst in!');
+                window.location.href = 'login.html';
+                return;
+            }
+            const url = window.config.apiUrl + `/api/albums/${albumId}/${action}`;
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify({ trackId })
+            });
+            const data = await res.json();
+            if (data.success) {
+                loadAlbums();
+            } else {
+                alert(data.error || 'Fout bij aanpassen album.');
+            }
+        }
+        async function loadAllTracks() {
+            const res = await fetch(window.config.apiUrl + '/api/music');
+            allTracks = await res.json();
+        }
+        async function init() {
+            await loadAllTracks();
+            loadAlbums();
+            const form = document.createElement('form');
+            form.innerHTML = '<input id="album-name" type="text" placeholder="Nieuw album naam" required> <button type="submit">Aanmaken</button>';
+            form.onsubmit = async function(e) {
+                e.preventDefault();
+                const token = localStorage.getItem('musicmedia_token');
+                if (!token) {
+                    alert('Log eerst in!');
+                    window.location.href = 'login.html';
+                    return;
+                }
+                const name = document.getElementById('album-name').value;
+                const res = await fetch(window.config.apiUrl + '/api/albums', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({ name, tracks: [] })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert('Album aangemaakt!');
+                    loadAlbums();
+                } else {
+                    alert(data.error || 'Fout bij aanmaken album.');
+                }
+            };
+            document.getElementById('albums').before(form);
+        }
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

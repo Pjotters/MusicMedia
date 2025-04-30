@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Muziek uploaden - MusicMedia</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Muziek uploaden</h1>
+    </header>
+    <main>
+        <form id="upload-form" enctype="multipart/form-data">
+            <input type="file" name="music" accept="audio/mp3,audio/wav" required><br>
+            <input type="text" name="title" placeholder="Titel" required><br>
+            <input type="text" name="artist" placeholder="Artiest" required><br>
+            <button type="submit">Uploaden</button>
+        </form>
+    </main>
+    <script src="config.js"></script>
+    <script>
+        document.getElementById('upload-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const token = localStorage.getItem('musicmedia_token');
+            if (!token) {
+                alert('Log eerst in!');
+                window.location.href = 'login.html';
+                return;
+            }
+            const formData = new FormData(this);
+            const res = await fetch(window.config.apiUrl + '/api/upload', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                },
+                body: formData
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert('Upload gelukt!');
+                this.reset();
+            } else {
+                alert(data.error || 'Upload mislukt.');
+            }
+        });
+    </script>
+</body>
+</html>

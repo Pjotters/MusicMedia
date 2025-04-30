@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MusicMedia - Home</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>MusicMedia</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="upload.html">Upload</a>
+            <a href="playlist.html">Playlists</a>
+            <a href="album.html">Albums</a>
+            <a href="ai.html">AI Muziek</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="subscription.html">Abonnementen</a>
+            <a href="admin.html">Admin</a>
+            <a href="login.html">Login</a>
+        </nav>
+    </header>
+    <main>
+        <h2>Welkom bij MusicMedia</h2>
+        <p>Luister, upload en genereer muziek met AI!</p>
+        <div id="music-list"></div>
+    </main>
+    <script src="main.js"></script>
+    <script src="config.js"></script>
+    <script>
+        async function loadMusic() {
+            const res = await fetch(window.config.apiUrl + '/api/music');
+            const music = await res.json();
+            const musicList = document.getElementById('music-list');
+            if (Array.isArray(music) && music.length > 0) {
+                musicList.innerHTML = '';
+                music.forEach(track => {
+                    let statusIcon = '';
+                    if (track.status === 'flagged') statusIcon = ' <span style="color:red">&#10006;</span>';
+                    if (track.status === 'error') statusIcon = ' <span style="color:gold">&#8211;</span>';
+                    if (track.explicit) statusIcon += ' <span style="color:orange">E</span>';
+                    musicList.innerHTML += `
+                        <div>
+                            <b>${track.title}</b> (${track.artist})${statusIcon}<br>
+                            <audio controls src="${window.config.apiUrl}/api/stream/${track.filename}"></audio>
+                        </div><hr>
+                    `;
+                });
+            } else {
+                musicList.innerHTML = '<em>Geen muziek gevonden.</em>';
+            }
+        }
+        loadMusic();
+    </script>
+</body>
+</html>
