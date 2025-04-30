@@ -1,31 +1,109 @@
+/* --- SPOTIFY-LIKE DARK THEME --- */
 body {
     margin: 0;
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background: linear-gradient(135deg, #1fc8db 0%, #2cb5e8 100%);
+    font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+    background: linear-gradient(135deg, #191414 0%, #232526 100%);
     color: #fff;
 }
 header {
-    background: #183b56;
-    padding: 1em 2em;
+    background: #191414;
+    padding: 1.5em 2em;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
 }
 header h1 {
     margin: 0 0 0.5em 0;
-    color: #1fc8db;
+    color: #1db954;
     letter-spacing: 2px;
+    font-size: 2.2em;
+    font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+}
+nav {
+    margin-bottom: 0.5em;
 }
 nav a {
     color: #fff;
     text-decoration: none;
-    margin-right: 1.5em;
+    margin-right: 2em;
     font-weight: 500;
+    font-size: 1.1em;
     transition: color 0.2s;
+    letter-spacing: 1px;
 }
 nav a:hover {
-    color: #1fc8db;
+    color: #1db954;
 }
 main {
-    padding: 2em;
+    padding: 2em 5vw;
+    max-width: 900px;
+    margin: 0 auto;
+}
+button, input[type="submit"] {
+    background: #1db954;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    padding: 0.7em 2em;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 0.5em 0;
+    transition: background 0.2s, color 0.2s;
+    box-shadow: 0 2px 8px rgba(30,185,84,0.08);
+}
+button:hover, input[type="submit"]:hover {
+    background: #17a74a;
+    color: #fff;
+}
+input, textarea, select {
+    background: #232526;
+    color: #fff;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 0.7em 1em;
+    margin-bottom: 1em;
+    font-size: 1em;
+    width: 100%;
+    box-sizing: border-box;
+}
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: #1db954;
+}
+.card, .playlist, .album {
+    background: rgba(30,30,30,0.93);
+    border-radius: 18px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+    padding: 1.5em 2em;
+    margin-bottom: 2em;
+}
+audio {
+    width: 100%;
+    margin-top: 0.5em;
+    border-radius: 8px;
+    background: #232526;
+}
+hr {
+    border: none;
+    border-top: 1px solid #333;
+    margin: 2em 0;
+}
+/* Album cover upload preview */
+.album-cover-preview {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 1em;
+    border: 2px solid #1db954;
+    background: #232526;
+    display: block;
+}
+/* Responsive */
+@media (max-width: 700px) {
+    main { padding: 1em 2vw; }
+    header { padding: 1em 1em; }
+    .card, .playlist, .album { padding: 1em 1em; }
 }
