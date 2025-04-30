@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - MusicMedia</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Admin Beheer</h1>
+    </header>
+    <main>
+        <h2>Te controleren nummers</h2>
+        <div id="to-review"></div>
+    </main>
+    <script src="config.js"></script>
+    <script>
+        async function adminLogin() {
+            let token = localStorage.getItem('musicmedia_admin_token');
+            if (!token) {
+                const username = prompt('Admin gebruikersnaam:');
+                const password = prompt('Admin wachtwoord:');
+                if (!username || !password) {
+                    alert('Login vereist!');
+                    window.location.href = 'login.html';
+                    return;
+                }
+                const res = await fetch(window.config.apiUrl + '/api/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await res.json();
+                if (data.success && data.token) {
+                    localStorage.setItem('musicmedia_admin_token', data.token);
+                    token = data.token;
+                } else {
+                    alert(data.error || 'Admin login mislukt.');
+                    window.location.href = 'login.html';
+                    return;
+                }
+            }
+            return token;
+        }
+        async function loadToReview() {
+            const token = await adminLogin();
+            if (!token) return;
+            const res = await fetch(window.config.apiUrl + '/api/admin/review', {
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            const data = await res.json();
+            const container = document.getElementById('to-review');
+            container.innerHTML = '';
+            if (Array.isArray(data) && data.length > 0) {
+                data.forEach(track => {
+                    const div = document.createElement('div');
+                    div.innerHTML = `<b>${track.title}</b> (${track.artist})<br>Status: ${track.status || ''} ${track.explicit ? 'E' : ''}`;
+                    ['approve','reject','explicit'].forEach(action => {
+                        const btn = document.createElement('button');
+                        btn.textContent = action === 'approve' ? 'Goedkeuren' : action === 'reject' ? 'Afkeuren' : 'E (expliciet)';
+                        btn.onclick = async () => {
+                            await fetch(window.config.apiUrl + '/api/admin/review', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': 'Bearer ' + token
+                                },
+                                body: JSON.stringify({ trackId: track.id, action })
+                            });
+                            loadToReview();
+                        };
+                        div.appendChild(btn);
+                    });
+                    container.appendChild(div);
+                    container.appendChild(document.createElement('hr'));
+                });
+            } else {
+                container.innerHTML = '<em>Niets te beoordelen.</em>';
+            }
+        }
+        loadToReview();
+    </script>
+</body>
+</html>

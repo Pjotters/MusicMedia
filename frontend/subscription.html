@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Abonnementen - MusicMedia</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Kies je abonnement</h1>
+    </header>
+    <main>
+        <div class="plans">
+            <div class="plan free">
+                <h2>Gratis</h2>
+                <p>Luister muziek, upload tot 5 tracks per maand, 3 playlists, 1 album, 3 AI-tracks.</p>
+                <button>Kies Gratis</button>
+            </div>
+            <div class="plan basic">
+                <h2>€4,99 / maand</h2>
+                <p>50 uploads/maand, 10 playlists, 5 albums, 20 AI-tracks, downloaden, geen advertenties.</p>
+                <button>Kies Basic</button>
+            </div>
+            <div class="plan premium">
+                <h2>€9,99 / maand</h2>
+                <p>Onbeperkt uploads, playlists, albums, AI-tracks, downloaden, geen advertenties, early access features.</p>
+                <button>Kies Premium</button>
+            </div>
+        </div>
+    </main>
+    <script src="config.js"></script>
+    <script>
+        document.querySelectorAll('.plan button').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                const plan = this.parentElement.classList.contains('free') ? 'free' : this.parentElement.classList.contains('basic') ? 'basic' : 'premium';
+                const token = localStorage.getItem('musicmedia_token');
+                if (!token) {
+                    alert('Log eerst in!');
+                    window.location.href = 'login.html';
+                    return;
+                }
+                if (plan !== 'free') {
+                    // Simuleer betaling
+                    const pay = await fetch(window.config.apiUrl + '/api/payment/mock', {
+                        method: 'POST',
+                        headers: { 'Authorization': 'Bearer ' + token }
+                    });
+                    const payData = await pay.json();
+                    if (!payData.success) {
+                        alert('Betaling mislukt!');
+                        return;
+                    }
+                }
+                // Abonnement kiezen
+                const res = await fetch(window.config.apiUrl + '/api/subscription', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({ plan })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert('Abonnement gewijzigd!');
+                } else {
+                    alert(data.error || 'Fout bij wijzigen abonnement.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - MusicMedia</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Login</h1>
+    </header>
+    <main>
+        <form id="login-form">
+            <input type="text" placeholder="Gebruikersnaam" required><br>
+            <input type="password" placeholder="Wachtwoord" required><br>
+            <button type="submit">Inloggen</button>
+        </form>
+        <p>Nog geen account? <a href="register.html">Registreer</a></p>
+    </main>
+    <script src="config.js"></script>
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const usernameOrEmail = this.querySelector('input[placeholder="Gebruikersnaam"]').value;
+            const password = this.querySelector('input[placeholder="Wachtwoord"]').value;
+            const res = await fetch(window.config.apiUrl + '/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ usernameOrEmail, password })
+            });
+            const data = await res.json();
+            if(data.success && data.token) {
+                localStorage.setItem('musicmedia_token', data.token);
+                alert('Inloggen gelukt!');
+                window.location.href = 'index.html';
+            } else {
+                alert(data.error || 'Inloggen mislukt.');
+            }
+        });
+    </script>
+</body>
+</html>
