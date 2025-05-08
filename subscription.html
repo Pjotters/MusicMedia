@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(135deg, #1db954 0%, #3a1c71 100%);
+            background: linear-gradient(135deg, #2979ff 0%, #3a1c71 100%);
             font-family: 'Montserrat', Arial, sans-serif;
             margin: 0;
             color: #fff;
@@ -24,7 +24,7 @@
             letter-spacing: -2px;
         }
         .pricing-hero p {
-            color: #b3b3b3;
+            color: #2979ff;
             font-size: 1.2em;
             margin-top: 0;
         }
@@ -50,7 +50,7 @@
             transition: background .2s, color .2s;
         }
         .plan-tabs button.active {
-            background: #1db954;
+            background: #2979ff;
             color: #fff;
         }
         .plans {
@@ -61,7 +61,7 @@
             margin-top: 18px;
         }
         .plan-card {
-            background: linear-gradient(135deg, #232526 60%, #1db954 100%);
+            background: linear-gradient(135deg, #232526 60%, #2979ff 100%);
             color: #fff;
             border-radius: 24px;
             box-shadow: 0 4px 32px #0004;
@@ -77,17 +77,17 @@
             animation: floatIn .7s cubic-bezier(.68,-0.55,.27,1.55);
         }
         .plan-card.popular {
-            background: linear-gradient(135deg, #1db954 60%, #3a1c71 100%);
+            background: linear-gradient(135deg, #2979ff 60%, #3a1c71 100%);
             color: #fff;
             transform: scale(1.07);
             z-index: 2;
-            box-shadow: 0 8px 40px #1db95444, 0 1.5px 0 #fff2 inset;
+            box-shadow: 0 8px 40px #2979ff99, 0 1.5px 0 #fff2 inset;
         }
         .plan-card .popular-badge {
             position: absolute;
             top: 18px; right: -40px;
             background: #fff;
-            color: #1db954;
+            color: #2979ff;
             font-weight: bold;
             font-size: 1em;
             padding: 7px 42px;
@@ -127,11 +127,11 @@
             gap: 8px;
         }
         .plan-card ul li .check {
-            color: #1db954;
+            color: #2979ff;
             font-size: 1.2em;
         }
         .plan-card button {
-            background: linear-gradient(90deg, #1db954 60%, #3a1c71 100%);
+            background: linear-gradient(90deg, #2979ff 60%, #3a1c71 100%);
             color: #fff;
             border: none;
             padding: 13px 0;
@@ -141,12 +141,12 @@
             font-weight: bold;
             margin-top: auto;
             cursor: pointer;
-            box-shadow: 0 2px 8px #1db95433;
+            box-shadow: 0 2px 8px #2979ff33;
             transition: background .2s, transform .2s;
             animation: pulse 1.8s infinite alternate;
         }
         .plan-card button:hover {
-            background: linear-gradient(90deg, #3a1c71 30%, #1db954 100%);
+            background: linear-gradient(90deg, #3a1c71 30%, #2979ff 100%);
             transform: scale(1.05);
         }
         @keyframes floatIn {
@@ -154,8 +154,8 @@
             100% { opacity: 1; transform: none; }
         }
         @keyframes pulse {
-            0% { box-shadow: 0 2px 8px #1db95433; }
-            100% { box-shadow: 0 6px 24px #1db95499; }
+            0% { box-shadow: 0 2px 8px #2979ff33; }
+            100% { box-shadow: 0 6px 24px #2979ff99; }
         }
     </style>
 </head>
@@ -233,7 +233,7 @@
         document.querySelectorAll('.plan-card').forEach(card => {
             card.addEventListener('mouseenter', () => {
                 card.style.transform = 'scale(1.09)';
-                card.style.boxShadow = '0 8px 40px #1db95499, 0 1.5px 0 #fff2 inset';
+                card.style.boxShadow = '0 8px 40px #2979ff99, 0 1.5px 0 #fff2 inset';
             });
             card.addEventListener('mouseleave', () => {
                 card.style.transform = '';

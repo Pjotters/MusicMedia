@@ -2,20 +2,20 @@
 body {
     margin: 0;
     font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
-    background: linear-gradient(135deg, #191414 0%, #232526 100%);
+    background: linear-gradient(135deg, #2979ff14 0%, #232526 100%); /* dark bg, keep */
     color: #fff;
 }
 header {
-    background: #191414;
+    background: #2979ff14;
     padding: 1.5em 2em;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    box-shadow: 0 2px 8px rgba(41,121,255,0.25);
 }
 header h1 {
     margin: 0 0 0.5em 0;
-    color: #1db954;
+    color: #2979ff;
     letter-spacing: 2px;
     font-size: 2.2em;
     font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
@@ -33,7 +33,7 @@ nav a {
     letter-spacing: 1px;
 }
 nav a:hover {
-    color: #1db954;
+    color: #2979ff;
 }
 main {
     padding: 2em 5vw;
@@ -41,7 +41,7 @@ main {
     margin: 0 auto;
 }
 button, input[type="submit"] {
-    background: #1db954;
+    background: #2979ff;
     color: #fff;
     border: none;
     border-radius: 30px;
@@ -51,10 +51,10 @@ button, input[type="submit"] {
     cursor: pointer;
     margin: 0.5em 0;
     transition: background 0.2s, color 0.2s;
-    box-shadow: 0 2px 8px rgba(30,185,84,0.08);
+    box-shadow: 0 2px 8px rgba(41,121,255,0.08);
 }
 button:hover, input[type="submit"]:hover {
-    background: #17a74a;
+    background: #2979ff;
     color: #fff;
 }
 input, textarea, select {
@@ -70,12 +70,12 @@ input, textarea, select {
 }
 input:focus, textarea:focus, select:focus {
     outline: none;
-    border-color: #1db954;
+    border-color: #2979ff;
 }
 .card, .playlist, .album {
-    background: rgba(30,30,30,0.93);
+    background: rgba(41,121,255,0.93);
     border-radius: 18px;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+    box-shadow: 0 2px 16px rgba(41,121,255,0.18);
     padding: 1.5em 2em;
     margin-bottom: 2em;
 }
@@ -97,7 +97,7 @@ hr {
     object-fit: cover;
     border-radius: 12px;
     margin-bottom: 1em;
-    border: 2px solid #1db954;
+    border: 2px solid #2979ff;
     background: #232526;
     display: block;
 }

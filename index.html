@@ -37,7 +37,7 @@
                 musicList.innerHTML = '';
                 music.forEach(track => {
                     let statusIcon = '';
-                    if (track.status === 'flagged') statusIcon = ' <span style="color:red">&#10006;</span>';
+                    if (track.status === 'flagged') statusIcon = ' <span style="color: #2979ff;">&#10006;</span>';
                     if (track.status === 'error') statusIcon = ' <span style="color:gold">&#8211;</span>';
                     if (track.explicit) statusIcon += ' <span style="color:orange">E</span>';
                     musicList.innerHTML += `
