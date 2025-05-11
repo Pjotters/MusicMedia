@@ -22,32 +22,60 @@
         </nav>
     </header>
     <main>
-        <h2>Welkom bij MusicMedia</h2>
-        <p>Luister, upload en genereer muziek met AI!</p>
-        <div id="music-list"></div>
+        <!-- Hero Section -->
+        <section class="hero">
+            <h2>Welcome to MusicMedia</h2>
+            <p>Het platform waar je gratis AI muziek kunt maken, uploaden en delen!</p>
+            <a href="ai.html" class="cta-button">Maak gratis AI muziek</a>
+        </section>
+
+        <!-- Over Section -->
+        <section class="about" id="about">
+            <h3>Over MusicMedia</h3>
+            <p>MusicMedia is het platform voor muziekliefhebbers en makers. Ontdek, genereer en deel muziek met behulp van de nieuwste AI-technologieën. Alles op één plek!</p>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features" id="features">
+            <h3>Features</h3>
+            <ul>
+                <li>AI Muziek genereren</li>
+                <li>Muziek uploaden en delen</li>
+                <li>Maak en beheer playlists & albums</li>
+                <li>Dashboard voor artiesten en luisteraars</li>
+                <li>Abonnementen voor extra mogelijkheden</li>
+            </ul>
+        </section>
+
+        <!-- Pricing Section -->
+        <section class="pricing" id="pricing">
+            <h3>Pricing</h3>
+            <p><strong>Gratis:</strong> Gebruik de basisfuncties, upload en luister muziek zonder kosten.</p>
+            <p><strong>Premium:</strong> Ontgrendel extra AI-mogelijkheden, hogere uploadlimieten en meer! <a href="subscription.html">Bekijk abonnementen</a></p>
+        </section>
+
+        <!-- Legal Section -->
+        <section class="legal" id="legal">
+            <h3>Legal</h3>
+            <ul>
+                <li><a href="#">Privacybeleid</a></li>
+                <li><a href="#">Gebruiksvoorwaarden</a></li>
+                <li><a href="#">Cookiebeleid</a></li>
+            </ul>
+        </section>
     </main>
-    <script src="main.js"></script>
-    <script src="config.js"></script>
-    <script>
-        async function loadMusic() {
-            const res = await fetch(window.config.apiUrl + '/api/music');
-            const music = await res.json();
-            const musicList = document.getElementById('music-list');
-            if (Array.isArray(music) && music.length > 0) {
-                musicList.innerHTML = '';
-                music.forEach(track => {
-                    let statusIcon = '';
-                    if (track.status === 'flagged') statusIcon = ' <span style="color: #2979ff;">&#10006;</span>';
-                    if (track.status === 'error') statusIcon = ' <span style="color:gold">&#8211;</span>';
-                    if (track.explicit) statusIcon += ' <span style="color:orange">E</span>';
-                    musicList.innerHTML += `
-                        <div>
-                            <b>${track.title}</b> (${track.artist})${statusIcon}<br>
-                            <audio controls src="${window.config.apiUrl}/api/stream/${track.filename}"></audio>
-                        </div><hr>
-                    `;
-                });
-            } else {
+    <style>
+        .hero { text-align: center; padding: 3em 1em; background: #f3f7fa; }
+        .cta-button { display: inline-block; margin-top: 1em; padding: 0.75em 2em; background: #2979ff; color: #fff; border-radius: 30px; text-decoration: none; font-weight: bold; transition: background 0.2s; }
+        .cta-button:hover { background: #1859b1; }
+        section { max-width: 700px; margin: 2em auto; padding: 1.5em; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        h3 { margin-top: 0; }
+        ul { padding-left: 1.2em; }
+        @media (max-width: 600px) {
+            section { padding: 1em; }
+        }
+    </style>
+
                 musicList.innerHTML = '<em>Geen muziek gevonden.</em>';
             }
         }
