@@ -9,60 +9,101 @@
     <header>
         <h1>AI Muziek Genereren</h1>
     </header>
-    <main>
-        <form id="ai-form">
-            <label><input type="radio" name="type" value="instrumental" checked> Instrumentaal</label>
-            <label><input type="radio" name="type" value="vocals"> Met vocals</label>
-            <div id="instrumental-options">
-                <input type="text" placeholder="Genre">
-                <input type="text" placeholder="Sfeer (rustig, vrolijk, etc)">
-                <input type="text" placeholder="Instrumenten (komma gescheiden)">
-            </div>
-            <div id="vocals-options" style="display:none;">
-                <textarea placeholder="Songtekst"></textarea><br>
-                <select>
-                    <option>Mannenstem</option>
-                    <option>Vrouwenstem</option>
-                </select>
-            </div>
-            <div style="margin-top:1em">
-                <label>Start (seconden): <input type="number" id="start" min="0" max="60" value="0" style="width:60px"></label>
-                <label style="margin-left:1em">End (seconden): <input type="number" id="end" min="1" max="60" value="10" style="width:60px"></label>
-            </div>
-            <button type="submit">Genereer Muziek</button>
-        </form>
+    <main class="ai-wizard-layout">
+        <section class="ai-wizard-left">
+            <form id="ai-wizard-form">
+                <div class="wizard-step" data-step="1">
+                    <h2>1. Wat wil je genereren?</h2>
+                    <button type="button" class="wizard-choice" data-value="instrumental">Instrumentaal</button>
+                    <button type="button" class="wizard-choice" data-value="vocals">Met vocals</button>
+                </div>
+                <div class="wizard-step" data-step="2" style="display:none">
+                    <div class="wizard-instrumental">
+                        <h2>2. Kies genre</h2>
+                        <input type="text" id="genre" placeholder="Genre">
+                        <h2>3. Sfeer</h2>
+                        <input type="text" id="sfeer" placeholder="Sfeer (rustig, vrolijk, etc)">
+                        <h2>4. Instrumenten</h2>
+                        <input type="text" id="instrumenten" placeholder="Instrumenten (komma gescheiden)">
+                    </div>
+                    <div class="wizard-vocals" style="display:none">
+                        <h2>2. Songtekst</h2>
+                        <textarea id="lyrics" placeholder="Songtekst"></textarea>
+                        <h2>3. Stem</h2>
+                        <select id="voice">
+                            <option>Mannenstem</option>
+                            <option>Vrouwenstem</option>
+                        </select>
+                    </div>
+                    <h2>5. Lengte</h2>
+                    <div style="display:flex;gap:1em;align-items:center">
+                        <label>Start <input type="number" id="start" min="0" max="60" value="0" style="width:60px"></label>
+                        <label>Einde <input type="number" id="end" min="1" max="60" value="10" style="width:60px"></label>
+                    </div>
+                    <button type="button" id="wizard-back">Terug</button>
+                    <button type="submit" id="wizard-generate">Genereer Muziek</button>
+                </div>
+            </form>
+        </section>
+        <section class="ai-wizard-right">
+            <h2>Jouw AI Tracks</h2>
+            <div id="ai-gallery" class="ai-gallery"></div>
+        </section>
     </main>
     <script src="config.js"></script>
     <script>
-        // Toggle opties
-        document.querySelectorAll('input[name="type"]').forEach(el => {
-            el.addEventListener('change', function() {
-                document.getElementById('instrumental-options').style.display = this.value === 'instrumental' ? '' : 'none';
-                document.getElementById('vocals-options').style.display = this.value === 'vocals' ? '' : 'none';
-            });
+    // Wizard logica
+    const wizardForm = document.getElementById('ai-wizard-form');
+    const steps = wizardForm.querySelectorAll('.wizard-step');
+    let wizardType = null;
+
+    // Toon stap 1
+    function showStep(step) {
+        steps.forEach(div => {
+            div.style.display = div.getAttribute('data-step') == step ? '' : 'none';
         });
-        document.getElementById('ai-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const token = localStorage.getItem('musicmedia_token');
-            if (!token) {
-                alert('Log eerst in!');
-                window.location.href = 'login.html';
-                return;
-            }
-            const type = document.querySelector('input[name="type"]:checked').value;
-            let payload = { type };
-            if (type === 'instrumental') {
-                payload.genre = document.querySelector('input[placeholder="Genre"]').value;
-                payload.sfeer = document.querySelector('input[placeholder^="Sfeer"]').value;
-                payload.instrumenten = document.querySelector('input[placeholder^="Instrumenten"]').value;
-            } else {
-                payload.lyrics = document.querySelector('textarea[placeholder="Songtekst"]').value;
-                payload.voice = document.querySelector('select').value;
-            }
-            // Start en end toevoegen
-            payload.start = parseInt(document.getElementById('start').value, 10) || 0;
-            payload.end = parseInt(document.getElementById('end').value, 10) || 10;
-            // Simuleer AI-generatie
+        // Toon alleen relevante velden
+        if (step == 2) {
+            wizardForm.querySelector('.wizard-instrumental').style.display = wizardType === 'instrumental' ? '' : 'none';
+            wizardForm.querySelector('.wizard-vocals').style.display = wizardType === 'vocals' ? '' : 'none';
+        }
+    }
+    // Stap 1 keuze
+    wizardForm.querySelectorAll('.wizard-choice').forEach(btn => {
+        btn.addEventListener('click', function() {
+            wizardType = this.getAttribute('data-value');
+            showStep(2);
+        });
+    });
+    // Terug knop
+    wizardForm.querySelector('#wizard-back').addEventListener('click', function(e) {
+        e.preventDefault();
+        showStep(1);
+    });
+    // Submit/generate
+    wizardForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const token = localStorage.getItem('musicmedia_token');
+        if (!token) {
+            alert('Log eerst in!');
+            window.location.href = 'login.html';
+            return;
+        }
+        let payload = { type: wizardType };
+        if (wizardType === 'instrumental') {
+            payload.genre = document.getElementById('genre').value;
+            payload.sfeer = document.getElementById('sfeer').value;
+            payload.instrumenten = document.getElementById('instrumenten').value;
+        } else {
+            payload.lyrics = document.getElementById('lyrics').value;
+            payload.voice = document.getElementById('voice').value;
+        }
+        payload.start = parseInt(document.getElementById('start').value, 10) || 0;
+        payload.end = parseInt(document.getElementById('end').value, 10) || 10;
+        const genBtn = document.getElementById('wizard-generate');
+        genBtn.disabled = true;
+        genBtn.textContent = 'Bezig...';
+        try {
             const res = await fetch(window.config.apiUrl + '/api/aigenerate', {
                 method: 'POST',
                 headers: {
@@ -73,11 +114,50 @@
             });
             const data = await res.json();
             if (data.success && data.track) {
-                alert('AI-muziek gegenereerd en toegevoegd!');
+                genBtn.textContent = 'Gelukt!';
+                setTimeout(() => { genBtn.textContent = 'Genereer Muziek'; genBtn.disabled = false; }, 1200);
+                await loadGallery();
+                showStep(1);
             } else {
                 alert(data.error || 'AI-generatie mislukt.');
+                genBtn.textContent = 'Genereer Muziek';
+                genBtn.disabled = false;
             }
-        });
+        } catch (err) {
+            alert('Fout bij genereren: ' + err.message);
+            genBtn.textContent = 'Genereer Muziek';
+            genBtn.disabled = false;
+        }
+    });
+    // Gallery laden
+    async function loadGallery() {
+        const token = localStorage.getItem('musicmedia_token');
+        const gallery = document.getElementById('ai-gallery');
+        gallery.innerHTML = '<div style="color:#aaa">Laden...</div>';
+        try {
+            const res = await fetch(window.config.apiUrl + '/api/music', {
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            const data = await res.json();
+            if (!Array.isArray(data)) throw new Error('Geen tracks');
+            if (data.length === 0) {
+                gallery.innerHTML = '<div style="color:#aaa">Nog geen AI-tracks gevonden.</div>';
+                return;
+            }
+            gallery.innerHTML = data.filter(t => t.artist && t.artist.includes('AI')).reverse().map(track => `
+                <div class="ai-track-card">
+                    <div class="ai-track-title">${track.title || 'AI Track'}</div>
+                    <div class="ai-track-meta">${track.type} &bull; ${new Date(track.created).toLocaleString()}</div>
+                    <audio controls src="../backend/uploads/${track.filename}"></audio>
+                </div>
+            `).join('');
+        } catch (err) {
+            gallery.innerHTML = '<div style="color:#f66">Fout bij laden gallery: ' + err.message + '</div>';
+        }
+    }
+    // Init
+    showStep(1);
+    loadGallery();
     </script>
 </body>
 </html>
