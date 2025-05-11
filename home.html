@@ -40,11 +40,16 @@
             font-size: 1.1em;
             padding: 12px 32px;
             border-radius: 8px;
-            transition: background .2s;
+            transition: background .2s, color .2s, box-shadow .2s;
+            outline: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .sidebar nav a.active, .sidebar nav a:hover {
-            background: #282828;
-            color: #2979ff;
+        .sidebar nav a.active, .sidebar nav a:focus, .sidebar nav a:hover {
+            background: linear-gradient(90deg, #2979ff 0%, #7f53ac 100%);
+            color: #fff;
+            box-shadow: 0 4px 18px rgba(41,121,255,0.15);
         }
         .sidebar .profile {
             margin-top: auto;
@@ -113,19 +118,27 @@
             margin-top: 14px;
         }
         .playlist-hero .actions button {
-            background: #2979ff;
+            background: linear-gradient(90deg, #2979ff 0%, #7f53ac 100%);
             color: #fff;
             border: none;
-            padding: 10px 28px;
-            border-radius: 24px;
-            font-size: 1em;
+            padding: 12px 32px;
+            border-radius: 28px;
+            font-size: 1.08em;
             margin-right: 12px;
             cursor: pointer;
             font-weight: bold;
+            box-shadow: 0 4px 18px rgba(41,121,255,0.10);
+            transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+        }
+        .playlist-hero .actions button:hover, .playlist-hero .actions button:focus {
+            background: linear-gradient(90deg, #1859b1 0%, #7f53ac 100%);
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 8px 32px rgba(41,121,255,0.18);
         }
         .playlist-hero .actions button.secondary {
             background: #282828;
             color: #fff;
+            box-shadow: none;
         }
         .tabs {
             display: flex;
@@ -154,19 +167,20 @@
         }
         .music-card {
             background: #181818;
-            border-radius: 16px;
+            border-radius: 18px;
             width: 180px;
             min-width: 180px;
-            box-shadow: 0 2px 8px #0003;
+            box-shadow: 0 2px 12px rgba(127,83,172,0.11);
             padding: 0 0 18px 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            transition: transform .15s;
+            transition: transform .15s, box-shadow .2s, background .2s;
         }
-        .music-card:hover {
+        .music-card:focus-within, .music-card:hover {
             transform: scale(1.04);
             background: #232526;
+            box-shadow: 0 8px 32px rgba(127,83,172,0.22);
         }
         .music-card img {
             width: 100%;
@@ -204,12 +218,13 @@
             position: fixed;
             left: 0; right: 0; bottom: 0;
             height: 84px;
-            background: #181818;
+            background: linear-gradient(90deg,#181818 60%,#222 100%);
             border-top: 1px solid #222;
             display: flex;
             align-items: center;
             padding: 0 40px;
             z-index: 200;
+            box-shadow: 0 -4px 18px rgba(41,121,255,0.09);
         }
         .playerbar .cover {
             width: 64px; height: 64px;
@@ -294,16 +309,21 @@
     </style>
 </head>
 <body>
-    <div class="sidebar">
+    <div class="sidebar" aria-label="Zijbalk hoofdmenu">
         <img src="MusicMedia.png" alt="logo" class="logo" />
         <nav>
-            <a href="home.html" class="active">Home</a>
-            <a href="upload.html">Uploaden</a>
-            <a href="album.html">Albums</a>
-            <a href="subscription.html">Abonnement</a>
+            <a href="home.html" class="active" aria-label="Home">🏠 Home</a>
+            <a href="ai.html" aria-label="AI Muziek">🎵 AI Muziek</a>
+            <a href="upload.html" aria-label="Uploaden">⏫ Uploaden</a>
+            <a href="playlist.html" aria-label="Playlists">🎧 Playlists</a>
+            <a href="album.html" aria-label="Albums">💿 Albums</a>
+            <a href="dashboard.html" aria-label="Dashboard">📊 Dashboard</a>
+            <a href="subscription.html" aria-label="Abonnement">💎 Abonnement</a>
+            <a href="admin.html" aria-label="Admin">🛠️ Admin</a>
+            <a href="login.html" aria-label="Login">🔑 Login</a>
         </nav>
         <div class="profile">
-            <img src="profile.png" alt="Profiel" onclick="window.location.href='dashboard.html'" />
+            <img src="profile.png" alt="Profiel" tabindex="0" onclick="window.location.href='dashboard.html'" aria-label="Profiel (naar dashboard)" />
         </div>
     </div>
     <div class="main-content">

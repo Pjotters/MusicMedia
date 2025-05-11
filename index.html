@@ -33,18 +33,22 @@
         }
         
         .hero .cta-button {
-            background-color: #2979ff;
+            background: linear-gradient(90deg, #2979ff 0%, #7f53ac 100%);
             color: #fff;
             border: none;
-            padding: 16px 32px;
-            font-size: 18px;
+            padding: 18px 38px;
+            font-size: 20px;
+            font-weight: 600;
             cursor: pointer;
-            border-radius: 30px;
-            transition: background 0.2s;
+            border-radius: 32px;
+            box-shadow: 0 6px 24px rgba(41,121,255,0.15);
+            transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+            outline: none;
         }
-        
-        .hero .cta-button:hover {
-            background-color: #1859b1;
+        .hero .cta-button:hover, .hero .cta-button:focus {
+            background: linear-gradient(90deg, #1859b1 0%, #7f53ac 100%);
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 10px 32px rgba(41,121,255,0.22);
         }
         
         /* Why MusicMedia Section */
@@ -88,23 +92,38 @@
             padding: 32px;
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            grid-gap: 16px;
+            grid-gap: 24px;
         }
         
         .features-grid .feature {
             background-color: #f7f7f7;
-            padding: 16px;
-            border-radius: 10px;
+            padding: 24px 16px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
+            box-shadow: 0 2px 12px rgba(127,83,172,0.07);
+            transition: box-shadow 0.2s, transform 0.15s;
         }
-        
+        .features-grid .feature:focus-within, .features-grid .feature:hover {
+            box-shadow: 0 6px 24px rgba(127,83,172,0.15);
+            transform: translateY(-2px) scale(1.02);
+        }
         .features-grid .feature img {
-            width: 50px;
-            height: 50px;
+            width: 54px;
+            height: 54px;
             object-fit: cover;
-            border-radius: 10px;
-            margin-right: 16px;
+            border-radius: 12px;
+            margin-right: 18px;
+        }
+        .features-grid .feature .feature-link {
+            color: #2979ff;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .features-grid .feature .feature-link:hover, .features-grid .feature .feature-link:focus {
+            color: #7f53ac;
+            text-decoration: underline;
         }
         
         /* Modal */
@@ -170,39 +189,45 @@
         }
         
         /* Responsive Design */
-        @media (max-width: 768px) {
-            .hero {
-                height: 50vh;
-            }
-            
+        @media (max-width: 900px) {
             .features-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
-        }
-        
-        @media (max-width: 480px) {
-            .hero {
-                height: 30vh;
+            .hero h1 {
+                font-size: 32px;
             }
-            
+        }
+        @media (max-width: 600px) {
             .features-grid {
-                grid-template-columns: repeat(1, 1fr);
+                grid-template-columns: 1fr;
+            }
+            .hero {
+                flex-direction: column;
+                height: 60vh;
+                padding: 24px 0;
+            }
+            .hero h1 {
+                font-size: 24px;
+            }
+            nav.main-nav {
+                flex-wrap: wrap;
+                padding: 10px 0;
             }
         }
     </style>
 </head>
 <body>
     <header>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="upload.html">Upload</a>
-            <a href="playlist.html">Playlists</a>
-            <a href="album.html">Albums</a>
-            <a href="ai.html">AI Muziek</a>
-            <a href="dashboard.html">Dashboard</a>
-            <a href="subscription.html">Abonnementen</a>
-            <a href="admin.html">Admin</a>
-            <a href="login.html">Login</a>
+        <nav class="main-nav" aria-label="Hoofdmenu">
+            <a href="index.html" class="nav-link" aria-label="Home">Home</a>
+            <a href="upload.html" class="nav-link" aria-label="Upload">Upload</a>
+            <a href="playlist.html" class="nav-link" aria-label="Playlists">Playlists</a>
+            <a href="album.html" class="nav-link" aria-label="Albums">Albums</a>
+            <a href="ai.html" class="nav-link" aria-label="AI Muziek">AI Muziek</a>
+            <a href="dashboard.html" class="nav-link" aria-label="Dashboard">Dashboard</a>
+            <a href="subscription.html" class="nav-link" aria-label="Abonnementen">Abonnementen</a>
+            <a href="admin.html" class="nav-link" aria-label="Admin">Admin</a>
+            <a href="login.html" class="nav-link" aria-label="Login">Login</a>
         </nav>
     </header>
     <main>
@@ -239,20 +264,20 @@
         <!-- Features Grid Section -->
         <section class="features-grid">
             <div class="feature">
-                <img src="Images/index/4.1" alt="Feature 1">
-                <p>AI Muziek genereren</p>
+                <img src="Images/index/4.1" alt="AI Muziek genereren">
+                <a href="ai.html" class="feature-link" aria-label="AI Muziek genereren">AI Muziek genereren</a>
             </div>
             <div class="feature">
-                <img src="Images/index/4.2" alt="Feature 2">
-                <p>Muziek uploaden en delen</p>
+                <img src="Images/index/4.2" alt="Muziek uploaden en delen">
+                <a href="upload.html" class="feature-link" aria-label="Muziek uploaden en delen">Muziek uploaden & delen</a>
             </div>
             <div class="feature">
-                <img src="Images/index/4.3" alt="Feature 3">
-                <p>Maak en beheer playlists & albums</p>
+                <img src="Images/index/4.3" alt="Playlists & albums">
+                <a href="playlist.html" class="feature-link" aria-label="Playlists en albums">Playlists & albums</a>
             </div>
             <div class="feature">
-                <img src="Images/index/4.4" alt="Feature 4">
-                <p>Dashboard voor artiesten en luisteraars</p>
+                <img src="Images/index/4.4" alt="Dashboard voor artiesten en luisteraars">
+                <a href="dashboard.html" class="feature-link" aria-label="Dashboard">Dashboard voor artiesten en luisteraars</a>
             </div>
         </section>
         
