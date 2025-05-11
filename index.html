@@ -5,10 +5,194 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MusicMedia - Home</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f3f7fa;
+            color: #333;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background-image: url('Images/index/1');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        
+        .hero .cta-button {
+            background-color: #2979ff;
+            color: #fff;
+            border: none;
+            padding: 16px 32px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 30px;
+            transition: background 0.2s;
+        }
+        
+        .hero .cta-button:hover {
+            background-color: #1859b1;
+        }
+        
+        /* Why MusicMedia Section */
+        .why-musicmedia {
+            background-color: #fff;
+            padding: 32px;
+            text-align: center;
+        }
+        
+        .why-musicmedia img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 16px;
+        }
+        
+        /* How it Works Section */
+        .how-it-works {
+            background-color: #f7f7f7;
+            padding: 32px;
+        }
+        
+        .how-it-works .step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+        
+        .how-it-works .step img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-right: 16px;
+        }
+        
+        /* Features Grid Section */
+        .features-grid {
+            background-color: #fff;
+            padding: 32px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 16px;
+        }
+        
+        .features-grid .feature {
+            background-color: #f7f7f7;
+            padding: 16px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .features-grid .feature img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-right: 16px;
+        }
+        
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+        }
+        
+        .modal-content {
+            background-color: #fff;
+            padding: 32px;
+            border-radius: 10px;
+            width: 50%;
+            margin: 40px auto;
+        }
+        
+        .modal-content h2 {
+            margin-top: 0;
+        }
+        
+        .modal-content ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .modal-content li {
+            margin-bottom: 16px;
+        }
+        
+        .modal-content a {
+            text-decoration: none;
+            color: #2979ff;
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: #333;
+            color: #fff;
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .footer ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .footer li {
+            display: inline-block;
+            margin-right: 16px;
+        }
+        
+        .footer a {
+            text-decoration: none;
+            color: #fff;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero {
+                height: 50vh;
+            }
+            
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero {
+                height: 30vh;
+            }
+            
+            .features-grid {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>MusicMedia</h1>
         <nav>
             <a href="index.html">Home</a>
             <a href="upload.html">Upload</a>
@@ -24,62 +208,70 @@
     <main>
         <!-- Hero Section -->
         <section class="hero">
-            <h2>Welcome to MusicMedia</h2>
-            <p>Het platform waar je gratis AI muziek kunt maken, uploaden en delen!</p>
-            <a href="ai.html" class="cta-button">Maak gratis AI muziek</a>
+            <h1>Maak gratis AI-muziek rechtenvrij!</h1>
+            <button class="cta-button">Maak nu!</button>
         </section>
-
-        <!-- Over Section -->
-        <section class="about" id="about">
-            <h3>Over MusicMedia</h3>
+        
+        <!-- Why MusicMedia Section -->
+        <section class="why-musicmedia">
+            <img src="Images/index/2" alt="Waarom MusicMedia?">
+            <h2>Waarom MusicMedia?</h2>
             <p>MusicMedia is het platform voor muziekliefhebbers en makers. Ontdek, genereer en deel muziek met behulp van de nieuwste AI-technologieën. Alles op één plek!</p>
         </section>
-
-        <!-- Features Section -->
-        <section class="features" id="features">
-            <h3>Features</h3>
-            <ul>
-                <li>AI Muziek genereren</li>
-                <li>Muziek uploaden en delen</li>
-                <li>Maak en beheer playlists & albums</li>
-                <li>Dashboard voor artiesten en luisteraars</li>
-                <li>Abonnementen voor extra mogelijkheden</li>
-            </ul>
+        
+        <!-- How it Works Section -->
+        <section class="how-it-works">
+            <h2>Zo werkt het</h2>
+            <div class="step">
+                <img src="Images/index/3.1" alt="Stap 1">
+                <p>Stap 1: Maak een account aan</p>
+            </div>
+            <div class="step">
+                <img src="Images/index/3.2" alt="Stap 2">
+                <p>Stap 2: Upload je muziek</p>
+            </div>
+            <div class="step">
+                <img src="Images/index/3.3" alt="Stap 3">
+                <p>Stap 3: Deel je muziek met de wereld</p>
+            </div>
         </section>
-
-        <!-- Pricing Section -->
-        <section class="pricing" id="pricing">
-            <h3>Pricing</h3>
-            <p><strong>Gratis:</strong> Gebruik de basisfuncties, upload en luister muziek zonder kosten.</p>
-            <p><strong>Premium:</strong> Ontgrendel extra AI-mogelijkheden, hogere uploadlimieten en meer! <a href="subscription.html">Bekijk abonnementen</a></p>
+        
+        <!-- Features Grid Section -->
+        <section class="features-grid">
+            <div class="feature">
+                <img src="Images/index/4.1" alt="Feature 1">
+                <p>AI Muziek genereren</p>
+            </div>
+            <div class="feature">
+                <img src="Images/index/4.2" alt="Feature 2">
+                <p>Muziek uploaden en delen</p>
+            </div>
+            <div class="feature">
+                <img src="Images/index/4.3" alt="Feature 3">
+                <p>Maak en beheer playlists & albums</p>
+            </div>
+            <div class="feature">
+                <img src="Images/index/4.4" alt="Feature 4">
+                <p>Dashboard voor artiesten en luisteraars</p>
+            </div>
         </section>
+        
 
-        <!-- Legal Section -->
-        <section class="legal" id="legal">
-            <h3>Legal</h3>
-            <ul>
-                <li><a href="#">Privacybeleid</a></li>
-                <li><a href="#">Gebruiksvoorwaarden</a></li>
-                <li><a href="#">Cookiebeleid</a></li>
-            </ul>
-        </section>
     </main>
-    <style>
-        .hero { text-align: center; padding: 3em 1em; background: #f3f7fa; }
-        .cta-button { display: inline-block; margin-top: 1em; padding: 0.75em 2em; background: #2979ff; color: #fff; border-radius: 30px; text-decoration: none; font-weight: bold; transition: background 0.2s; }
-        .cta-button:hover { background: #1859b1; }
-        section { max-width: 700px; margin: 2em auto; padding: 1.5em; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-        h3 { margin-top: 0; }
-        ul { padding-left: 1.2em; }
-        @media (max-width: 600px) {
-            section { padding: 1em; }
-        }
-    </style>
-
-                musicList.innerHTML = '<em>Geen muziek gevonden.</em>';
-            }
-        }
-        loadMusic();
+    <footer class="footer">
+        <ul>
+            <li><a href="#">Privacybeleid</a></li>
+            <li><a href="#">Gebruiksvoorwaarden</a></li>
+            <li><a href="#">Cookiebeleid</a></li>
+        </ul>
+    </footer>
+    
+    <script>
+        // CTA button direct naar ai.html
+        const ctaButton = document.querySelector('.cta-button');
+        ctaButton.addEventListener('click', () => {
+            window.location.href = 'ai.html';
+        });
     </script>
 </body>
 </html>

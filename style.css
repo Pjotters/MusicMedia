@@ -2,9 +2,349 @@
 body {
     margin: 0;
     font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
-    background: linear-gradient(135deg, #191414 0%, #232526 100%); /* deep dark bg, Spotify style but not green */
+    background: linear-gradient(135deg, #191414 0%, #232526 100%);
     color: #fff;
 }
+
+
+.ai-suno-wrapper {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #191414 0%, #232526 100%);
+    color: #fff;
+    font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+}
+.ai-suno-header {
+    display: flex;
+    align-items: center;
+    padding: 1.5em 2em 1em 2em;
+    background: #191414;
+    border-bottom: 1px solid #222;
+}
+.ai-suno-logo {
+    font-size: 2em;
+    font-weight: bold;
+    color: #2979ff;
+    margin-right: 2em;
+    letter-spacing: 2px;
+}
+.ai-suno-tabs {
+    display: flex;
+    gap: 1em;
+}
+.ai-suno-tab {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.1em;
+    font-weight: 500;
+    padding: 0.5em 2em;
+    border-radius: 30px 30px 0 0;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    opacity: 0.7;
+}
+.ai-suno-tab.active {
+    background: #232526;
+    color: #2979ff;
+    opacity: 1;
+}
+.ai-suno-main {
+    display: flex;
+    flex-direction: row;
+    gap: 2em;
+    max-width: 1200px;
+    margin: 2em auto;
+    padding: 0 2em;
+}
+.ai-suno-left {
+    flex: 1 1 340px;
+    max-width: 420px;
+    background: rgba(30,30,30,0.97);
+    border-radius: 18px;
+    box-shadow: 0 2px 16px rgba(41,121,255,0.10);
+    padding: 2em 2em 1.5em 2em;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    min-width: 300px;
+}
+.ai-suno-prompt-block {
+    margin-bottom: 1.2em;
+}
+#ai-prompt {
+    width: 100%;
+    min-height: 60px;
+    max-height: 120px;
+    font-size: 1.2em;
+    background: #232526;
+    color: #fff;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 1em;
+    margin-bottom: 1em;
+    resize: vertical;
+}
+#ai-tag-input {
+    width: 100%;
+    font-size: 1em;
+    background: #232526;
+    color: #fff;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 0.7em 1em;
+    margin-bottom: 1em;
+}
+.ai-suno-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    margin-bottom: 1em;
+}
+.ai-suno-tag {
+    background: #2979ff;
+    color: #fff;
+    border-radius: 18px;
+    padding: 0.4em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.ai-suno-tag:hover {
+    background: #2979ffcc;
+}
+.ai-suno-toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    margin-bottom: 1em;
+}
+.ai-suno-toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    font-size: 1.1em;
+    cursor: pointer;
+}
+#ai-instrumental-toggle {
+    accent-color: #2979ff;
+    width: 1.2em;
+    height: 1.2em;
+}
+.ai-suno-create-btn {
+    background: linear-gradient(90deg, #2979ff 0%, #00c6fb 100%);
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    padding: 1em 0;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 0.5em 0 0 0;
+    box-shadow: 0 2px 8px rgba(41,121,255,0.10);
+    transition: background 0.2s, color 0.2s;
+    width: 100%;
+}
+.ai-suno-create-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+.ai-suno-feedback {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1.5em;
+    color: #2979ff;
+    font-size: 1.1em;
+    min-height: 56px;
+    animation: fadein 0.6s;
+}
+@keyframes fadein {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: none; }
+}
+.ai-suno-feedback .ai-suno-animdots {
+    display: inline-block;
+    margin-left: 0.3em;
+    letter-spacing: 2px;
+}
+.ai-suno-animdots span {
+    opacity: 0.3;
+    animation: dotsfade 1.2s infinite;
+}
+.ai-suno-animdots span:nth-child(2) { animation-delay: 0.2s; }
+.ai-suno-animdots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes dotsfade {
+    0%, 80%, 100% { opacity: 0.3; }
+    40% { opacity: 1; }
+}
+
+.ai-suno-spinner {
+    width: 36px;
+    height: 36px;
+    border: 5px solid #2979ff33;
+    border-top: 5px solid #2979ff;
+    border-radius: 50%;
+    margin-bottom: 0.7em;
+    animation: spin 1.1s linear infinite, pulse 1.6s infinite alternate;
+    display: none;
+    box-shadow: 0 0 0 0 #2979ff44;
+}
+.ai-suno-spinner.spin, .ai-suno-feedback .ai-suno-spinner {
+    display: block;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 #2979ff44; }
+    100% { box-shadow: 0 0 18px 8px #2979ff22; }
+}
+
+.ai-suno-right {
+    flex: 2 1 600px;
+    background: rgba(30,30,30,0.97);
+    border-radius: 18px;
+    box-shadow: 0 2px 16px rgba(41,121,255,0.10);
+    padding: 2em 2em 1.5em 2em;
+    min-width: 350px;
+    display: flex;
+    flex-direction: column;
+}
+.ai-suno-workspace-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1em;
+    gap: 1em;
+}
+.ai-suno-back-btn {
+    background: none;
+    border: none;
+    color: #2979ff;
+    font-size: 1.7em;
+    cursor: pointer;
+    margin-right: 0.7em;
+    display: inline-block;
+}
+.ai-suno-community-btn {
+    background: #232526;
+    border: none;
+    color: #fff;
+    border-radius: 18px;
+    padding: 0.4em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    margin-left: auto;
+    transition: background 0.2s;
+}
+.ai-suno-community-btn:hover {
+    background: #2979ff;
+}
+.ai-suno-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2em;
+}
+.ai-suno-track-card {
+    background: #222a;
+    border-radius: 14px;
+    padding: 1em 1.5em;
+    box-shadow: 0 2px 8px rgba(41,121,255,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 0.7em;
+}
+.ai-suno-track-title {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #fff;
+}
+.ai-suno-track-meta {
+    color: #aaa;
+    font-size: 0.97em;
+}
+.ai-suno-gallery-loading, .ai-suno-gallery-empty, .ai-suno-gallery-error {
+    color: #aaa;
+    text-align: center;
+    margin: 2em 0;
+    font-size: 1.2em;
+    animation: fadein 0.7s;
+}
+.ai-suno-gallery-loading:before {
+    content: '';
+    display: block;
+    width: 80%;
+    margin: 0 auto 1.2em auto;
+    height: 18px;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #232526 25%, #313a4d 50%, #232526 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.6s linear infinite;
+}
+@keyframes shimmer {
+    0% { background-position: -120% 0; }
+    100% { background-position: 120% 0; }
+}
+@media (max-width: 900px) {
+    .ai-suno-main {
+        flex-direction: column;
+        gap: 1.2em;
+        padding: 0 0.5em;
+    }
+    .ai-suno-left, .ai-suno-right {
+        min-width: 0;
+        padding: 1.2em 1em;
+    }
+}
+
+/* AI mascotte muzieknoot animatie */
+.ai-suno-mascot {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1em;
+    height: 48px;
+}
+.ai-suno-note {
+    font-size: 2.2em;
+    color: #2979ff;
+    opacity: 0.8;
+    margin: 0 0.2em;
+    animation: floatnote 1.2s infinite alternate;
+}
+.ai-suno-note:nth-child(2) {
+    animation-delay: 0.3s;
+    color: #00c6fb;
+}
+.ai-suno-note:nth-child(3) {
+    animation-delay: 0.6s;
+    color: #fff;
+}
+@keyframes floatnote {
+    0% { transform: translateY(0) scale(1); opacity: 0.8; }
+    50% { transform: translateY(-16px) scale(1.16); opacity: 1; }
+    100% { transform: translateY(0) scale(1); opacity: 0.8; }
+}
+
+.ai-suno-funfact {
+    margin-top: 1em;
+    color: #ffe082;
+    background: rgba(41,121,255,0.08);
+    border-left: 5px solid #2979ff;
+    border-radius: 7px;
+    padding: 0.7em 1.2em;
+    font-size: 1.05em;
+    font-style: italic;
+    box-shadow: 0 2px 8px 0 #2979ff11;
+    animation: fadein 0.8s;
+    max-width: 340px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
 header {
     background: #191414;
     padding: 1.5em 2em;

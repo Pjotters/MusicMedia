@@ -6,6 +6,112 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Akkoord Modal -->
+    <div class="modal" id="ai-modal" style="display:none">
+        <div class="modal-content">
+            <h2>Voor je begint met AI-muziek maken...</h2>
+            <form id="ai-consent-form">
+                <label><input type="checkbox" class="consent-checkbox" required> Ik geen muziek maak dat is gemaakt voor 18+ content</label><br>
+                <label><input type="checkbox" class="consent-checkbox" required> Ik geen muziek maak die haatdragend is</label><br>
+                <label><input type="checkbox" class="consent-checkbox" required> Ik geen muziek maak die scheldwoorden of beledigingen bevatten, tenzij ik op de knop expliciet heb geklikt</label><br>
+                <label><input type="checkbox" class="consent-checkbox" required> Ik ga ermee akkoord dat MusicMedia(-AI) niet verantwoordelijk is indien het gemaakte nummer toch copyright delen bevat.</label><br>
+                <label><input type="checkbox" class="consent-checkbox" required> Ik ga akkoord met de volgende beleidsdocumenten van MusicMedia:<br>
+                    <a href="privacy.html" target="_blank">Privacybeleid</a>,
+                    <a href="terms-en.html" target="_blank">Terms of Service</a>,
+                    <a href="ai.html" target="_blank">MusicMedia-AI</a>,
+                    <a href="#" target="_blank">Pjotters-Company beleid</a>.
+                </label><br>
+                <button type="submit" class="cta-button" id="consent-submit" disabled>Start AI-muziek maken</button>
+            </form>
+        </div>
+    </div>
+    <div class="ai-suno-wrapper">
+        <header class="ai-suno-header">
+            <div class="ai-suno-logo">MusicMedia AI</div>
+            <nav class="ai-suno-tabs">
+                <button id="tab-simple" class="ai-suno-tab active">Simple</button>
+                <button id="tab-custom" class="ai-suno-tab">Custom</button>
+            </nav>
+        </header>
+        <main class="ai-suno-main">
+            <section class="ai-suno-left">
+                <div class="ai-suno-prompt-block">
+                    <textarea id="ai-prompt" placeholder="Beschrijf je muziek..." rows="3"></textarea>
+                    <div class="ai-suno-tags" id="ai-tags"></div>
+                    <input id="ai-tag-input" type="text" placeholder="Voeg genre, sfeer of instrument toe en druk op Enter">
+                    <div class="ai-suno-toggle-row">
+                        <label class="ai-suno-toggle-label">
+                            <input type="checkbox" id="ai-instrumental-toggle" checked>
+                            <span>Instrumentaal</span>
+                        </label>
+                    </div>
+                </div>
+                <button id="ai-generate-btn" class="ai-suno-create-btn">Create</button>
+                <div id="ai-feedback" class="ai-suno-feedback" style="display:none">
+    <div class="ai-suno-mascot">
+        <span class="ai-suno-note">&#119070;</span>
+        <span class="ai-suno-note">&#119071;</span>
+        <span class="ai-suno-note">&#119074;</span>
+    </div>
+    <div class="ai-suno-spinner"></div>
+    <div id="ai-feedback-text">Bezig met maken van audio<span class="ai-suno-animdots"><span>.</span><span>.</span><span>.</span></span></div>
+    <div id="ai-funfact" class="ai-suno-funfact"></div>
+</div>
+            </section>
+            <section class="ai-suno-right">
+                <div class="ai-suno-workspace-header">
+                    <button id="ai-back-btn" class="ai-suno-back-btn" style="display:none">←</button>
+                    <span id="ai-workspace-title">My Workspace</span>
+                    <button id="ai-community-btn" class="ai-suno-community-btn">Community</button>
+                </div>
+                <div id="ai-gallery" class="ai-suno-gallery"></div>
+            </section>
+        </main>
+    </div>
+    <script>
+        // Disable AI UI until consent
+        const modal = document.getElementById('ai-modal');
+        const consentForm = document.getElementById('ai-consent-form');
+        const consentSubmit = document.getElementById('consent-submit');
+        const checkboxes = document.querySelectorAll('.consent-checkbox');
+        const aiWrapper = document.querySelector('.ai-suno-wrapper');
+
+        function setUIBlocked(blocked) {
+            if (blocked) {
+                aiWrapper.style.pointerEvents = 'none';
+                aiWrapper.style.opacity = '0.4';
+                aiWrapper.setAttribute('aria-hidden', 'true');
+            } else {
+                aiWrapper.style.pointerEvents = '';
+                aiWrapper.style.opacity = '';
+                aiWrapper.removeAttribute('aria-hidden');
+            }
+        }
+
+        // Open modal on load
+        window.addEventListener('DOMContentLoaded', () => {
+            modal.style.display = 'block';
+            setUIBlocked(true);
+        });
+
+        // Enable submit only if all checkboxes checked
+        function updateConsentBtn() {
+            let allChecked = true;
+            checkboxes.forEach(cb => { if (!cb.checked) allChecked = false; });
+            consentSubmit.disabled = !allChecked;
+        }
+        checkboxes.forEach(cb => cb.addEventListener('change', updateConsentBtn));
+
+        consentForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            modal.style.display = 'none';
+            setUIBlocked(false);
+        });
+    </script>
+    <script src="config.js"></script>
+    <script src="ai.js"></script>
+</body>
+</html>
     <header>
         <h1>AI Muziek Genereren</h1>
     </header>
