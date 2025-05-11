@@ -2,11 +2,11 @@
 body {
     margin: 0;
     font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
-    background: linear-gradient(135deg, #2979ff14 0%, #232526 100%); /* dark bg, keep */
+    background: linear-gradient(135deg, #191414 0%, #232526 100%); /* deep dark bg, Spotify style but not green */
     color: #fff;
 }
 header {
-    background: #2979ff14;
+    background: #191414;
     padding: 1.5em 2em;
     display: flex;
     flex-direction: column;
@@ -73,7 +73,7 @@ input:focus, textarea:focus, select:focus {
     border-color: #2979ff;
 }
 .card, .playlist, .album {
-    background: rgba(41,121,255,0.93);
+    background: rgba(30,30,30,0.93);
     border-radius: 18px;
     box-shadow: 0 2px 16px rgba(41,121,255,0.18);
     padding: 1.5em 2em;
