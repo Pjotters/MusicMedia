@@ -169,6 +169,167 @@
             <button class="active" id="tab-gen">Algemeen</button>
             <button id="tab-ecom">E-commerce</button>
         </div>
+        <div class="compare-table-wrap">
+            <p style="text-align:center; margin-bottom:16px; color:#2979ff; font-weight:bold;">Vergelijk onze abonnementen en kies wat bij jou past:</p>
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th>Kenmerk</th>
+                        <th>Starter</th>
+                        <th>Basic</th>
+                        <th>Premium</th>
+                        <th>Enterprise</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Prijs per maand</td>
+                        <td>Gratis</td>
+                        <td>€ 4,99</td>
+                        <td>€ 9,99</td>
+                        <td>Op aanvraag</td>
+                    </tr>
+                    <tr>
+                        <td>AI-tracks per maand</td>
+                        <td>3</td>
+                        <td>20</td>
+                        <td>Onbeperkt</td>
+                        <td>Custom</td>
+                    </tr>
+                    <tr>
+                        <td>Uploads</td>
+                        <td>5/maand</td>
+                        <td>50/maand</td>
+                        <td>Onbeperkt</td>
+                        <td>Custom</td>
+                    </tr>
+                    <tr>
+                        <td>Playlists</td>
+                        <td>3</td>
+                        <td>10</td>
+                        <td>Onbeperkt</td>
+                        <td>Custom</td>
+                    </tr>
+                    <tr>
+                        <td>Albums</td>
+                        <td>1</td>
+                        <td>5</td>
+                        <td>Onbeperkt</td>
+                        <td>Custom</td>
+                    </tr>
+                    <tr>
+                        <td>Advertentievrij</td>
+                        <td><span class="cross">✖</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                    </tr>
+                    <tr>
+                        <td>Downloaden</td>
+                        <td><span class="cross">✖</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                    </tr>
+                    <tr>
+                        <td>Commerciële licentie</td>
+                        <td><span class="cross">✖</span></td>
+                        <td><span class="cross">✖</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                    </tr>
+                    <tr>
+                        <td>Prioriteit support</td>
+                        <td><span class="cross">✖</span></td>
+                        <td><span class="cross">✖</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                    </tr>
+                    <tr>
+                        <td>Exclusieve content</td>
+                        <td><span class="cross">✖</span></td>
+                        <td><span class="cross">✖</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                    </tr>
+                    <tr>
+                        <td>Early access features</td>
+                        <td><span class="cross">✖</span></td>
+                        <td><span class="cross">✖</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                    </tr>
+                    <tr>
+                        <td>API toegang</td>
+                        <td><span class="cross">✖</span></td>
+                        <td><span class="cross">✖</span></td>
+                        <td><span class="cross">✖</span></td>
+                        <td><span class="check">✔</span></td>
+                    </tr>
+                    <tr>
+                        <td>Eigen branding</td>
+                        <td><span class="cross">✖</span></td>
+                        <td><span class="cross">✖</span></td>
+                        <td><span class="cross">✖</span></td>
+                        <td><span class="check">✔</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <style>
+        .compare-table-wrap { margin-bottom: 32px; }
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #f8fafc;
+            margin: 0 auto 12px auto;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 16px #2979ff11;
+        }
+        .compare-table th, .compare-table td {
+            padding: 14px 10px;
+            text-align: center;
+            border-bottom: 1px solid #e3e8ee;
+        }
+        .compare-table th {
+            background: linear-gradient(90deg, #2979ff 70%, #1db954 100%);
+            color: #fff;
+            font-size: 1.1em;
+        }
+        .compare-table tr:last-child td {
+            border-bottom: none;
+        }
+        .compare-table td {
+            color: #222;
+            font-size: 1.03em;
+        }
+        .compare-table .check {
+            color: #1db954;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        .compare-table .cross {
+            color: #c62828;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        @media (max-width: 900px) {
+            .compare-table th, .compare-table td {
+                padding: 8px 4px;
+                font-size: 0.98em;
+            }
+            .compare-table {
+                font-size: 0.99em;
+            }
+        }
+        @media (max-width: 600px) {
+            .compare-table th, .compare-table td {
+                font-size: 0.93em;
+                padding: 6px 2px;
+            }
+        }
+        </style>
         <div class="plans">
             <div class="plan-card" id="plan-free">
                 <h2>Starter</h2>
