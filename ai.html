@@ -4,12 +4,74 @@
     <meta charset="UTF-8">
     <title>AI Muziek - MusicMedia</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(30,40,60,0.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.25s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; } to { opacity: 1; }
+        }
+        .modal-content {
+            background: #fff;
+            color: #222;
+            border-radius: 18px;
+            box-shadow: 0 8px 48px rgba(41,121,255,0.18);
+            padding: 36px 28px 28px 28px;
+            max-width: 420px;
+            width: 95vw;
+            position: relative;
+            animation: modalPop .25s;
+        }
+        @keyframes modalPop {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .modal-content h2 { color: #2979ff; margin-top: 0; }
+        .modal-content label { display: block; margin: 16px 0 0 0; font-size: 1.01em; }
+        .modal-content a { color: #2979ff; text-decoration: underline; }
+        .cta-button {
+            background: linear-gradient(90deg, #2979ff 0%, #7f53ac 100%);
+            color: #fff;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 28px;
+            font-size: 1.08em;
+            margin-top: 24px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 18px rgba(41,121,255,0.10);
+            transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+        }
+        .cta-button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .modal-close {
+            position: absolute;
+            top: 18px; right: 18px;
+            background: none;
+            border: none;
+            color: #2979ff;
+            font-size: 2em;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .modal-close:hover, .modal-close:focus { color: #7f53ac; }
+        @media (max-width: 500px) {
+            .modal-content { padding: 18px 6vw 18px 6vw; }
+        }
+    </style>
 </head>
 <body>
     <!-- Akkoord Modal -->
-    <div class="modal" id="ai-modal" style="display:none">
-        <div class="modal-content">
-            <h2>Voor je begint met AI-muziek maken...</h2>
+    <div class="modal-overlay" id="ai-modal-overlay" style="display:none">
+        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="ai-modal-title">
+            <button class="modal-close" id="ai-modal-close" aria-label="Sluiten">&times;</button>
+            <h2 id="ai-modal-title">Voor je begint met AI-muziek maken...</h2>
             <form id="ai-consent-form">
                 <label><input type="checkbox" class="consent-checkbox" required> Ik geen muziek maak dat is gemaakt voor 18+ content</label><br>
                 <label><input type="checkbox" class="consent-checkbox" required> Ik geen muziek maak die haatdragend is</label><br>
@@ -18,7 +80,7 @@
                 <label><input type="checkbox" class="consent-checkbox" required> Ik ga akkoord met de volgende beleidsdocumenten van MusicMedia:<br>
                     <a href="privacy.html" target="_blank">Privacybeleid</a>,
                     <a href="terms-en.html" target="_blank">Terms of Service</a>,
-                    <a href="ai.html" target="_blank">MusicMedia-AI</a>,
+                    <a href="MusicMedia-AI.html" target="_blank">MusicMedia-AI</a>,
                     <a href="#" target="_blank">Pjotters-Company beleid</a>.
                 </label><br>
                 <button type="submit" class="cta-button" id="consent-submit" disabled>Start AI-muziek maken</button>
@@ -68,48 +130,58 @@
             </section>
         </main>
     </div>
-    <script>
-        // Disable AI UI until consent
-        const modal = document.getElementById('ai-modal');
-        const consentForm = document.getElementById('ai-consent-form');
-        const consentSubmit = document.getElementById('consent-submit');
-        const checkboxes = document.querySelectorAll('.consent-checkbox');
-        const aiWrapper = document.querySelector('.ai-suno-wrapper');
 
-        function setUIBlocked(blocked) {
-            if (blocked) {
-                aiWrapper.style.pointerEvents = 'none';
-                aiWrapper.style.opacity = '0.4';
-                aiWrapper.setAttribute('aria-hidden', 'true');
-            } else {
-                aiWrapper.style.pointerEvents = '';
-                aiWrapper.style.opacity = '';
-                aiWrapper.removeAttribute('aria-hidden');
-            }
-        }
-
-        // Open modal on load
-        window.addEventListener('DOMContentLoaded', () => {
-            modal.style.display = 'block';
-            setUIBlocked(true);
-        });
-
-        // Enable submit only if all checkboxes checked
-        function updateConsentBtn() {
-            let allChecked = true;
-            checkboxes.forEach(cb => { if (!cb.checked) allChecked = false; });
-            consentSubmit.disabled = !allChecked;
-        }
-        checkboxes.forEach(cb => cb.addEventListener('change', updateConsentBtn));
-
-        consentForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            modal.style.display = 'none';
-            setUIBlocked(false);
-        });
-    </script>
     <script src="config.js"></script>
     <script src="ai.js"></script>
+    <script>
+    // --- AI Modal Logic ---
+    // Zorg dat deze variabelen NIET opnieuw gedeclareerd worden als ze al bestaan
+    window._aiModalVars = window._aiModalVars || {};
+    const modalOverlay = window._aiModalVars.modalOverlay = document.getElementById('ai-modal-overlay');
+    const modalClose = window._aiModalVars.modalClose = document.getElementById('ai-modal-close');
+    const consentForm = window._aiModalVars.consentForm = document.getElementById('ai-consent-form');
+    const consentSubmit = window._aiModalVars.consentSubmit = document.getElementById('consent-submit');
+    const checkboxes = window._aiModalVars.checkboxes = document.querySelectorAll('.consent-checkbox');
+    const generateBtn = window._aiModalVars.generateBtn = document.getElementById('ai-generate-btn');
+    const feedbackDiv = window._aiModalVars.feedbackDiv = document.getElementById('ai-feedback');
+
+    let aiGenerationStarted = false;
+    let aiGenerationDone = false;
+
+    if (feedbackDiv) feedbackDiv.style.display = 'none';
+
+    function updateConsentBtn() {
+        let allChecked = true;
+        checkboxes.forEach(cb => { if (!cb.checked) allChecked = false; });
+        consentSubmit.disabled = !allChecked;
+    }
+    checkboxes.forEach(cb => cb.addEventListener('change', updateConsentBtn));
+
+    if (generateBtn) {
+        generateBtn.onclick = async function(e) {
+            e.preventDefault();
+            if (!aiGenerationStarted) {
+                aiGenerationStarted = true;
+                feedbackDiv.style.display = 'none';
+                window._pendingAI = window.generateAI();
+            }
+            modalOverlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    consentForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        modalOverlay.style.display = 'none';
+        document.body.style.overflow = '';
+        feedbackDiv.style.display = '';
+    });
+
+    modalClose.addEventListener('click', function() {
+        modalOverlay.style.display = 'none';
+        document.body.style.overflow = '';
+    });
+    </script>
 </body>
 </html>
     <header>

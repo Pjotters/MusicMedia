@@ -27,27 +27,119 @@
         <p>Laatst bijgewerkt: 11 mei 2025</p>
 
         <h2>1. Doel en Toepassing</h2>
-        <p>Dit beleid beschrijft de regels, rechten en plichten voor het gebruik van de AI-muziekgenerator van MusicMedia. Door gebruik te maken van MusicMedia-AI ga je akkoord met deze voorwaarden.</p>
+        <p>Dit beleid beschrijft de regels, rechten en plichten voor het gebruik van de AI-muziekgenerator van MusicMedia. Door gebruik te maken van MusicMedia-AI ga je akkoord met deze voorwaarden en de <a href="terms.html">Algemene Voorwaarden</a> van MusicMedia.</p>
 
         <h2>2. Toegestaan Gebruik</h2>
         <ul>
-            <li>Het is alleen toegestaan AI-muziek te genereren voor persoonlijke, educatieve of commerciële doeleinden, mits je voldoet aan dit beleid.</li>
+            <li>Het is alleen toegestaan AI-muziek te genereren voor persoonlijke, educatieve of commerciële doeleinden, mits je voldoet aan dit beleid en de <a href="terms.html">Algemene Voorwaarden</a>.</li>
             <li>Het is verboden AI-muziek te genereren die in strijd is met de wet, haatdragend, discriminerend, pornografisch, gewelddadig, of anderszins onwenselijk is.</li>
             <li>Je mag geen AI-muziek genereren die inbreuk maakt op rechten van derden (zoals auteursrecht, portretrecht, merkenrecht).</li>
         </ul>
 
         <h2>3. Eigendom en Rechten</h2>
         <ul>
-            <li>De door jou gegenereerde AI-muziek is in principe rechtenvrij en mag door jou worden gebruikt, gedeeld en commercieel worden ingezet.</li>
+            <li>De door jou gegenereerde AI-muziek is in principe rechtenvrij en mag door jou worden gebruikt, gedeeld en commercieel worden ingezet, mits je voldoet aan de <a href="terms.html">Algemene Voorwaarden</a> en dit beleid.</li>
             <li>MusicMedia en haar partners behouden zich het recht voor om gegenereerde content te gebruiken voor promotie, analyse en verbetering van de dienst, tenzij je hier schriftelijk bezwaar tegen maakt.</li>
             <li>Voor zover mogelijk doet MusicMedia afstand van haar auteursrechten op de gegenereerde muziek, tenzij anders overeengekomen.</li>
         </ul>
 
         <h2>4. Abonnementsrechten</h2>
         <ul>
-            <li>Gratis gebruikers mogen AI-muziek genereren voor eigen gebruik en delen, met een limiet op het aantal creaties per maand.</li>
-            <li>Betaalde abonnees krijgen uitgebreidere rechten, zoals hogere limieten, commerciële licentie en prioriteit bij support.</li>
+            <li>Gratis gebruikers mogen AI-muziek genereren voor eigen gebruik en delen, met een limiet op het aantal creaties per maand, zoals beschreven op de <a href="prijzen.html">Prijzenpagina</a>.</li>
+            <li>Betaalde abonnees krijgen uitgebreidere rechten, zoals hogere limieten, commerciële licentie en prioriteit bij support, zoals beschreven op de <a href="subscription.html">Abonnementenpagina</a>.</li>
             <li>Bij misbruik (zoals massale scraping, bots, of schending van dit beleid) kan toegang direct worden ingetrokken zonder restitutie.</li>
+        </ul>
+        <button id="toggleCompare" class="compare-toggle" aria-expanded="false" aria-controls="abonnementenVergelijk">
+            <span class="arrow">▶</span> Vergelijk abonnementen
+        </button>
+        <div id="abonnementenVergelijk" class="compare-table-container" style="display:none;">
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th>Kenmerk</th>
+                        <th>Starter</th>
+                        <th>Basic</th>
+                        <th>Premium</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Prijs per maand</td>
+                        <td>Gratis</td>
+                        <td>€ 4,99</td>
+                        <td>€ 9,99</td>
+                    </tr>
+                    <tr>
+                        <td>AI-tracks per maand</td>
+                        <td>3</td>
+                        <td>20</td>
+                        <td>Onbeperkt</td>
+                    </tr>
+                    <tr>
+                        <td>Uploads</td>
+                        <td>5/maand</td>
+                        <td>50/maand</td>
+                        <td>Onbeperkt</td>
+                    </tr>
+                    <tr>
+                        <td>Playlists</td>
+                        <td>3</td>
+                        <td>10</td>
+                        <td>Onbeperkt</td>
+                    </tr>
+                    <tr>
+                        <td>Albums</td>
+                        <td>1</td>
+                        <td>5</td>
+                        <td>Onbeperkt</td>
+                    </tr>
+                    <tr>
+                        <td>Advertentievrij</td>
+                        <td><span class="cross">✖</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                    </tr>
+                    <tr>
+                        <td>Downloaden</td>
+                        <td><span class="cross">✖</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                    </tr>
+                    <tr>
+                        <td>Commerciële licentie</td>
+                        <td><span class="cross">✖</span></td>
+                        <td><span class="cross">✖</span></td>
+                        <td><span class="check">✔</span></td>
+                    </tr>
+                    <tr>
+                        <td>Prioriteit support</td>
+                        <td><span class="cross">✖</span></td>
+                        <td><span class="cross">✖</span></td>
+                        <td><span class="check">✔</span></td>
+                    </tr>
+                    <tr>
+                        <td>Exclusieve content</td>
+                        <td><span class="cross">✖</span></td>
+                        <td><span class="cross">✖</span></td>
+                        <td><span class="check">✔</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleBtn = document.getElementById('toggleCompare');
+            const tableDiv = document.getElementById('abonnementenVergelijk');
+            const arrow = toggleBtn.querySelector('.arrow');
+            toggleBtn.addEventListener('click', function() {
+                const expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+                toggleBtn.setAttribute('aria-expanded', !expanded);
+                tableDiv.style.display = expanded ? 'none' : 'block';
+            });
+        });
+        </script>
+        <ul>
+            <li>Let op" De abbonomenten worden regelmatig aangepast. Hierdoor kunnen de voordelen van een abbonement veranderen, om deze reden is de prijzenbeleid altijd lijdened!</li> <li><a href="prijzen.html">Prijzenbeleid</a>.</li>
         </ul>
 
         <h2>5. Bezwaar en Verwijdering</h2>
@@ -60,7 +152,7 @@
         <ul>
             <li>Als gebruiker ben je volledig verantwoordelijk voor de prompts en gegenereerde muziek die je maakt en deelt.</li>
             <li>MusicMedia is niet aansprakelijk voor schade, claims of conflicten voortvloeiend uit het gebruik van AI-muziek.</li>
-            <li>MusicMedia voldoet aan de AVG (GDPR) en bewaart zo min mogelijk persoonsgegevens.</li>
+            <li>MusicMedia voldoet aan de AVG (GDPR) en bewaart zo min mogelijk persoonsgegevens, zoals beschreven in onze <a href="privacy.html">Privacyverklaring</a>.</li>
         </ul>
 
         <h2>7. Wettelijke Verplichtingen</h2>
@@ -71,9 +163,34 @@
 
         <h2>8. Contact en Verantwoordelijke</h2>
         <ul>
-            <li>Verantwoordelijke voor dit beleid: Pjotters-Company, t.a.v. MusicMedia Legal, legal@musicmedia.nl</li>
-            <li>Voor vragen, klachten of verzoeken: neem contact op via <a href="mailto:legal@musicmedia.nl">legal@musicmedia.nl</a></li>
+            <li>Verantwoordelijke voor dit beleid: Pjotters-Company, t.a.v. MusicMedia Legal, <a href="mailto:legal@musicmedia.nl">legal@musicmedia.nl</a></li>
+            <li>Voor vragen, klachten of verzoeken: neem contact op via <a href="mailto:zipzop@gmail.com">zipzop@gmail.com</a></li>
         </ul>
+
+        <h2>9. Refunds en Annulering</h2>
+        <ul>
+            <li>Je kunt je abonnement opzeggen of annuleren zoals beschreven op de <a href="subscription.html">Abonnementenpagina</a>.</li>
+            <li>Refunds worden alleen verleend in overeenstemming met onze <a href="terms.html">Algemene Voorwaarden</a>.</li>
+        </ul>
+
+        <h2>10. Minderjarigen</h2>
+        <ul>
+            <li>MusicMedia-AI is alleen toegankelijk voor personen van 16 jaar en ouder.</li>
+            <li>Als je minderjarig bent, mag je MusicMedia-AI alleen gebruiken onder toezicht van een ouder of voogd.</li>
+        </ul>
+
+        <h2>11. Gebruiksdoelen</h2>
+        <ul>
+            <li>MusicMedia-AI mag alleen worden gebruikt voor persoonlijke, educatieve of commerciële doeleinden.</li>
+            <li>Je mag MusicMedia-AI niet gebruiken voor illegale of onrechtmatige doeleinden.</li>
+        </ul>
+
+        <h2>12. Aansprakelijkheid</h2>
+        <ul>
+            <li>MusicMedia is niet aansprakelijk voor schade, claims of conflicten voortvloeiend uit het gebruik van AI-muziek.</li>
+            <li>Je bent volledig verantwoordelijk voor de prompts en gegenereerde muziek die je maakt en deelt.</li>
+        </ul>
+
         <div class="footer">&copy; 2025 MusicMedia / Pjotters-Company</div>
     </div>
 </body>
