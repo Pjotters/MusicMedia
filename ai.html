@@ -25,6 +25,10 @@
                     <option>Vrouwenstem</option>
                 </select>
             </div>
+            <div style="margin-top:1em">
+                <label>Start (seconden): <input type="number" id="start" min="0" max="60" value="0" style="width:60px"></label>
+                <label style="margin-left:1em">End (seconden): <input type="number" id="end" min="1" max="60" value="10" style="width:60px"></label>
+            </div>
             <button type="submit">Genereer Muziek</button>
         </form>
     </main>
@@ -55,6 +59,9 @@
                 payload.lyrics = document.querySelector('textarea[placeholder="Songtekst"]').value;
                 payload.voice = document.querySelector('select').value;
             }
+            // Start en end toevoegen
+            payload.start = parseInt(document.getElementById('start').value, 10) || 0;
+            payload.end = parseInt(document.getElementById('end').value, 10) || 10;
             // Simuleer AI-generatie
             const res = await fetch(window.config.apiUrl + '/api/aigenerate', {
                 method: 'POST',
